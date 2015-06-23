@@ -1,0 +1,13 @@
+{
+  "title": "Owl",
+  "name": "owl-addon",
+  "version": "1.0.0",
+  "description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
+  "main": "index.js",
+  "author": "Sidhant Sharma",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT"
+}
