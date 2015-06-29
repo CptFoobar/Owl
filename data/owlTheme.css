@@ -7,51 +7,62 @@
 		text-shadow: none !important;
 		transition: background-color 0.75s ease-in, color 0.1s ease-in !important;
 	}
+
 	html,
 	body {
         background: -moz-linear-gradient(top, #2B2B2B, #2B2B2B) #2B2B2B repeat !important;
     }
+    
     html * {
         background: #2B2B2B !important;
         color: #AAAAAA !important;
         border-color: #333 !important;
     }
+
     a {
         background-color: #2B2B2B !important;
         color: #AAAAAA !important;
         border-color: #9F9F9F !important;
     }
+    
     input,
     textarea {
 		-moz-appearance: none !important;
         color: #EBEBEB !important;
         outline: none !important;
     }
-	input [type=button],
+	
+    input [type=button],
 	input[type=submit],
 	button {
 		cursor: pointer !important;
 	}
+    
     :-moz-placeholder {
         color: #4D6BC4 !important;
     }
+    
     b,
     em,
     strong {
         color: #999 !important;
     }
+    
     a,
     a * {
         color: #4488BB !important;
     }
+    
     a:visited,
     a:visited * {
         color: #8855DD !important;
     }
+    
     a:hover,
     a:hover * {
         color: #0AE !important;
     }
+    
     a.highlight,
     a.highlight *,
     a.active,
@@ -61,10 +72,27 @@
     [href="#"] {
         color: #BBB !important;
     }
+    
     *:focus {
         color: #FFFFFF !important;
     }
+    
     *:active {
         color: #FFFFFF !important;
     }
+
+    pre .prettyprint { display: block; background-color: #333 !important;}
+    pre .nocode { background-color: none; color: #000 !important;}
+    pre .str { color: #A5C25C !important;} 
+    pre .kwd { color: #CB772F !important; font-weight: bold }
+    pre .com { color: #619647 !important;} 
+    pre .typ { color: #6897BB !important;} 
+    pre .lit { color: #CAF531 !important;} 
+    pre .pun { color: #A9B7C6 !important;}    
+    pre .pln { color: #A9B7C6 !important;}  
+    pre .tag { color: #f0e68c !important; font-weight: bold} 
+    pre .atn { color: #bdb76b !important; font-weight: bold }
+    pre .atv { color: #ffa0a0 !important;} 
+    pre .dec { color: #98fb98 !important;}
+
 }
