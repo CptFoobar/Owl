@@ -1,4 +1,4 @@
-@namespace url(http://www.w3.org/1999/xhtml);
+@namespace html url(http://www.w3.org/1999/xhtml);
 
 @-moz-document regexp("^(https?|ftps?|file|about):(?!((.*).pdf)).*$") {
 	* {
@@ -35,7 +35,7 @@
         color: #EBEBEB !important;
         outline: none !important;
         background-image: none;
-        border: #4A2AB2;
+        border: #999999 !important;
     }
 	
     input [type=button],
@@ -118,7 +118,7 @@
     pre .atn { color: #bdb76b !important; font-weight: bold }
     pre .atv { color: #ffa0a0 !important;} 
     pre .dec { color: #98fb98 !important;}
-    
+
     code {
         background-color: #393939 !important;
     }
