@@ -1,0 +1,16 @@
+@namespace url(http://www.w3.org/1999/xhtml);
+
+@-moz-document domain("facebook.com") {
+    .stageWrapper.lfloat._ohe, .stageWrapper.lfloat._ohe * {
+        /* fix image display in shadowbox view */
+        background-color: transparent !important;
+    }
+    #photoborder * {
+        /* fix image display in theatre view */
+        background-color: transparent !important;
+    }
+    ._52c6 {
+        /* show article information below posts containing links */
+        position: relative !important;
+    }
+}

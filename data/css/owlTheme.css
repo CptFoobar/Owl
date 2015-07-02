@@ -1,11 +1,10 @@
 @namespace url(http://www.w3.org/1999/xhtml);
 
-
 @-moz-document regexp("^(https?|ftps?|file|about):(?!((.*).pdf)).*$") {
 	* {
 		box-shadow: none !important;
 		text-shadow: none !important;
-		transition: background-color 0.75s ease-in, color 0.1s ease-in !important;
+		transition: background-color 0.50s ease-in, color 0.1s ease-in !important;
 	}
 
 	html,
@@ -13,23 +12,30 @@
         background: -moz-linear-gradient(top, #2B2B2B, #2B2B2B) #2B2B2B repeat !important;
     }
     
-    html * {
+    html {
         background: #2B2B2B !important;
         color: #AAAAAA !important;
         border-color: #333 !important;
     }
 
+    div {
+        background: #2B2B2B !important;
+        color: #B6B6B6 !important;
+    }
+
     a {
         background-color: #2B2B2B !important;
-        color: #AAAAAA !important;
-        border-color: #9F9F9F !important;
+        border-color: #AEAEAE !important;
     }
     
     input,
     textarea {
 		-moz-appearance: none !important;
+        background-color: #2B2B2B !important;
         color: #EBEBEB !important;
         outline: none !important;
+        background-image: none;
+        border: #4A2AB2;
     }
 	
     input [type=button],
@@ -48,6 +54,20 @@
         color: #999 !important;
     }
     
+    ul, li, th, td, dl, dd, dt, ol, p, article, section {
+        background-color: #2B2B2B !important;
+        color: #AAAAAA !important;
+    } 
+
+    h1, h2, h3, h4, h5, h6 {
+        background-color: #2B2B2B !important;
+        color: #B7B7B7 !important;
+    }
+    
+    span, cite {
+        color: #AAAAAA !important;
+    }
+
     a,
     a * {
         color: #4488BB !important;
@@ -55,7 +75,7 @@
     
     a:visited,
     a:visited * {
-        color: #8855DD !important;
+        color: #85D !important;
     }
     
     a:hover,
@@ -81,6 +101,10 @@
         color: #FFFFFF !important;
     }
 
+    /* Code syntax highlighting */
+    pre {
+        background-color: #393939 !important;
+    }
     pre .prettyprint { display: block; background-color: #333 !important;}
     pre .nocode { background-color: none; color: #000 !important;}
     pre .str { color: #A5C25C !important;} 
@@ -94,5 +118,12 @@
     pre .atn { color: #bdb76b !important; font-weight: bold }
     pre .atv { color: #ffa0a0 !important;} 
     pre .dec { color: #98fb98 !important;}
-
+    
+    code {
+        background-color: #393939 !important;
+    }
+    blockquote {
+        background-color: #404040 !important;
+        color: #AAAAAA;
+    }
 }

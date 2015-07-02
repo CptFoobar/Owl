@@ -8,7 +8,7 @@ const DataUrl = require("sdk/self").data.url,
   Tabs = require("sdk/tabs"),
   ToggleButton = require("sdk/ui/button/toggle").ToggleButton;
 
-const owlTheme = nsIIOService.newURI(DataUrl("owlTheme.css"), null, null);
+const owlTheme = nsIIOService.newURI(DataUrl("css/themeLoader.css"), null, null);
 const owlOnString = "Own Mode On";
 const owlOffString = "Owl Mode Off";
 var owlMode = false;
