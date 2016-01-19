@@ -1,13 +1,23 @@
 {
-  "title": "Owl - For comfortable reading",
-  "name": "owl-comfortable-reading-addon",
-  "version": "1.1.3",
-  "description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
-  "main": "index.js",
-  "author": "Sidhant Sharma",
-  "engines": {
-    "firefox": ">=38.0a1",
-    "fennec": ">=38.0a1"
-  },
-  "license": "MIT"
+    "title": "Owl - For comfortable reading",
+    "name": "owl-comfortable-reading-addon",
+    "version": "1.2.0",
+    "description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
+    "main": "index.js",
+    "author": "Sidhant Sharma [:tk]",
+    "engines": {
+        "firefox": ">=38.0a1"
+    },
+    "icon": {
+        "48": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png",
+        "64": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png"
+    },
+    "preferences": [{
+        "title": "Turn On Owl on startup",
+        "name": "owlOnStartup",
+        "type": "bool",
+        "description": "Turn on Owl as soon as Firefox is started",
+        "value": false
+    }],
+    "license": "MIT"
 }

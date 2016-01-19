@@ -1,0 +1,60 @@
+.toggle.owl,
+.toggle-on.owl,
+.toggle-off.owl {
+    border-radius: 0px;
+}
+
+.toggle.owl .toggle-handle {
+    border-radius: 0px;
+    width: 75px;
+}
+
+.owl_logo {
+    background: rgba(0, 0, 0, 0.25) url("../icons/Owl-Logo.png") no-repeat scroll 50% 50%;
+    background-size: cover;
+    min-height: 100px;
+}
+
+.vspace {
+    height: 15px;
+    min-height: 15px;
+    width: 100%;
+}
+
+.hotkey {
+    font-size: 13px;
+    color: rgb(26, 106, 0);
+}
+
+.site_options {
+    font-size: 14px;
+}
+
+.disabled_list_link {
+    font-size: 12px;
+    color: rgb(20, 46, 156);
+    text-decoration: underline;
+}
+
+.contact {
+    font-size: 12px;
+    padding-top: 10px;
+}
+
+.footer {
+    font-size: 13px;
+    color: rgb(0, 71, 255);
+}
+
+.footer_divider {
+    margin-top: 15px;
+    margin-bottom: 13px;
+    border-width: 1px 0px 0px;
+    border-style: solid none none;
+    border-color: #DDD -moz-use-text-color -moz-use-text-color;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+}

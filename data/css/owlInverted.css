@@ -1,0 +1,58 @@
+@namespace html url(http://www.w3.org/1999/xhtml);
+
+@-moz-document regexp("^(https?|ftps?|file|about):(?!((.*).pdf)).*$") {
+    html {
+        filter: invert(95%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
+        overflow: auto;
+    }
+    img, iframe, video, *:not(object):not(body)>embed, object, *[style*="background:url"]:empty, *[style*="background-image:url"]:empty, *[style*="background: url"]:empty, *[style*="background-image: url"]:empty, canvas {
+        filter: brightness(95%) invert(105%) hue-rotate(180deg) !important;
+    }
+
+    .irc_bg {
+        background-color: #2b2b2b;
+    }
+
+    *:full-screen {
+        filter: none !important;
+    }
+
+    html {
+        background: rgb(30, 30, 30) !important;
+        min-height: 100%;
+    }
+
+    /* Google images image preview banner */
+    #irc_cc {
+        background-color: #dfdfdf;
+    }
+
+    .irc_pt, ._Hcb{
+        color: #383838;
+    }
+
+    /* Google homepage user image */
+    .gb_b.gb_4a.gb_R {
+        filter: brightness(90%) invert(95%) hue-rotate(180deg) !important;
+    }
+
+    /* Google Inbox icons fix */
+    .pE, .HH{
+        filter: brightness(90%) invert(95%) hue-rotate(180deg) !important;
+    }
+    .du.ew {
+        filter: invert(95%);
+    }
+
+    /* Yahoo navigation fix */
+    .Row.Pend-10 {
+        background: #f9f9f9 !important;
+    }
+}
+
+/*
+youtube player fix:
+iframe, .html5-video-player, .has-custom-banner, #theater-background, *:not(.html5-video-player):not(.channel-header-profile-image-container):not(.html5-storyboard-filmstrip):not(.html5-storyboard-framepreview):not(.html5-storyboard-lens) > img {
+    filter: invert(100%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
+}
+*/
