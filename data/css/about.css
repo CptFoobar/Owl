@@ -1,0 +1,21 @@
+.paypal-form>form>table>tbody>tr>td>select {
+    width: 150%;
+    color: #333;
+}
+
+.paypal-form>form>table>tbody>tr>td {
+    color: #333;
+}
+
+.help_links {
+    color: rgb(0, 87, 255);
+}
+
+.help_links:hover, .help_links:active, .help_links:focus {
+    color: rgb(0, 45, 175);
+}
+
+.get_blink {
+    color: #494949;
+    font-size: 1.3em !important;
+}
