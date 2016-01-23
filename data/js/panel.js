@@ -5,7 +5,7 @@
             $("#disable_here").prop("checked", config.whitelist);
             $("#use_classic").prop("checked", config.classic);
             $("#disable_here").prop("disabled", !config.mode);
-            $("#use_classic").prop("disabled", config.whitelist || !config.mode);
+            $("#use_classic").prop("disabled", config.whitelist || !config.mode || config.alwaysClassic);
             $(".site_options").css("color", config.mode ? "#333" : "#6E6E6E");
         });
         /* Toggle Switch for Owl */

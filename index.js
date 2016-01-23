@@ -16,7 +16,9 @@ const invertStyle = Style({ uri: "./css/owlInverted.css" });
 /* Init variables */
 var showPanel = true;
 var activateOnStartup = prefSet.prefs.owlOnStartup;
+var alwaysClassic = prefSet.prefs.alwaysClassic;
 var owlMode = activateOnStartup;
+var attachStyle = alwaysClassic ? classicStyle : invertStyle;
 const breakingSiteRoots = ["techcrunch.com"];
 
 /* Whitelist and Classic Theme list */
@@ -57,8 +59,9 @@ var owlHotKey = Hotkey({
 panel.on("show", function() {
     panel.port.emit("tab_config", {
         mode: owlMode,
-        classic: (indexInArray(getDomainFromUrl(tabs.activeTab.url), classicSiteList) > -1),
-        whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1)
+        classic: ((indexInArray(getDomainFromUrl(tabs.activeTab.url), classicSiteList) > -1) || alwaysClassic),
+        whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1),
+        alwaysClassic: alwaysClassic
     });
 });
 
@@ -75,14 +78,14 @@ panel.port.on("use_classic_theme", function(payload) {
             if (index == -1) {
                 classicSiteList.push(host);
                 ss.storage.classicSiteList = classicSiteList;
-                detach(invertStyle, tabs.activeTab);
+                detach(attachStyle, tabs.activeTab);
                 attach(classicStyle, tabs.activeTab);
             }
         } else {
             classicSiteList.splice(index, 1);
             ss.storage.classicSiteList = classicSiteList;
             detach(classicStyle, tabs.activeTab);
-            attach(invertStyle, tabs.activeTab);
+            attach(attachStyle, tabs.activeTab);
         }
     }
     setOwl(false);
@@ -117,6 +120,13 @@ if (activateOnStartup) {
     setOwl(owlMode);
 }
 
+prefSet.on("alwaysClassic", onAlwaysClassicChange);
+
+/* Open welcome page on install / upgrade */
+if (self.loadReason == "install" || self.loadReason == "upgrade")
+    require("sdk/tabs").open(data.url("markup/welcome.html"));
+
+
 function setOwl(oMode) {
     owlButton.icon = data.url("icons/" + (oMode ? "enabled" : "disabled") + "-64.png");
     owlButton.label = "Owl " + (oMode ? "On" : "Off");
@@ -148,8 +158,8 @@ function getStyleForUrl(tabUrl) {
         if (tabUrl.indexOf(whiteSites[j]) > -1)
             return "no_style";
 
-    /* Default for all websites is invertStyle */
-    var tabStyle = invertStyle;
+    /* Default for all websites is attachStyle */
+    var tabStyle = attachStyle;
 
     /* Check if site is known breaking site */
     for (var j = 0; j < breakingSiteRoots.length; j++)
@@ -201,6 +211,19 @@ function indexInArray(url, urlList) {
             return i;
     return -1;
 };
+
+function onAlwaysClassicChange(prefName) {
+    if (prefName === "alwaysClassic") {
+        alwaysClassic = prefSet.prefs.alwaysClassic;
+        setOwl(false);
+        if (alwaysClassic)
+            attachStyle = classicStyle;
+        else
+            attachStyle = invertStyle;
+        setOwl(owlMode);
+    }
+}
+
 
 function openTestSites() {
     var testSites = [
