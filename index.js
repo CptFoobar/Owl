@@ -56,13 +56,23 @@ var owlHotKey = Hotkey({
   }
 });
 
+var classicHotkey = Hotkey({
+    combo: "alt-shift-c",
+    onPress: function() {
+        if (owlMode) {
+            var host = getDomainFromUrl(tabs.activeTab.url);
+            if (host.length > 0) {
+                var index = indexInArray(host, classicSiteList);
+                manipClassic(index, host);
+                refreshOwl();
+                updatePanelConfig();
+            }
+        }
+  }
+});
+
 panel.on("show", function() {
-    panel.port.emit("tab_config", {
-        mode: owlMode,
-        classic: ((indexInArray(getDomainFromUrl(tabs.activeTab.url), classicSiteList) > -1) || alwaysClassic),
-        whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1),
-        alwaysClassic: alwaysClassic
-    });
+    updatePanelConfig();
 });
 
 panel.port.on("toggle_owl", function(payload) {
@@ -74,22 +84,10 @@ panel.port.on("use_classic_theme", function(payload) {
     var host = getDomainFromUrl(tabs.activeTab.url);
     if (host.length > 0) {
         var index = indexInArray(host, classicSiteList);
-        if (payload.value) {
-            if (index == -1) {
-                classicSiteList.push(host);
-                ss.storage.classicSiteList = classicSiteList;
-                detach(attachStyle, tabs.activeTab);
-                attach(classicStyle, tabs.activeTab);
-            }
-        } else {
-            classicSiteList.splice(index, 1);
-            ss.storage.classicSiteList = classicSiteList;
-            detach(classicStyle, tabs.activeTab);
-            attach(attachStyle, tabs.activeTab);
-        }
+        if (payload.value)
+            manipClassic(index, host);
+        refreshOwl();
     }
-    setOwl(false);
-    setOwl(owlMode);
 });
 
 panel.port.on("disable_website", function(payload) {
@@ -110,8 +108,7 @@ panel.port.on("disable_website", function(payload) {
                 attach(tabStyle, tabs.activeTab);
         }
     }
-    setOwl(false);
-    setOwl(owlMode);
+    refreshOwl();
 });
 
 /* Turn on Owl if startup preference set */
@@ -126,6 +123,29 @@ prefSet.on("alwaysClassic", onAlwaysClassicChange);
 if (self.loadReason == "install" || self.loadReason == "upgrade")
     require("sdk/tabs").open(data.url("markup/welcome.html"));
 
+
+function manipClassic(index, host) {
+    if (index == -1) {
+        classicSiteList.push(host);
+        ss.storage.classicSiteList = classicSiteList;
+        detach(attachStyle, tabs.activeTab);
+        attach(classicStyle, tabs.activeTab);
+    } else {
+        classicSiteList.splice(index, 1);
+        ss.storage.classicSiteList = classicSiteList;
+        detach(classicStyle, tabs.activeTab);
+        attach(attachStyle, tabs.activeTab);
+    }
+}
+
+function updatePanelConfig() {
+    panel.port.emit("tab_config", {
+        mode: owlMode,
+        classic: ((indexInArray(getDomainFromUrl(tabs.activeTab.url), classicSiteList) > -1) || alwaysClassic),
+        whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1),
+        alwaysClassic: alwaysClassic
+    });
+}
 
 function setOwl(oMode) {
     owlButton.icon = data.url("icons/" + (oMode ? "enabled" : "disabled") + "-64.png");
@@ -224,6 +244,10 @@ function onAlwaysClassicChange(prefName) {
     }
 }
 
+function refreshOwl() {
+    setOwl(false);
+    setOwl(owlMode);
+}
 
 function openTestSites() {
     var testSites = [
