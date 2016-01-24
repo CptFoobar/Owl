@@ -1,0 +1,29 @@
+body {
+    background-color: #493D60;
+}
+
+.page-header {
+    color: rgb(223, 223, 223);
+}
+
+.page-header > h1 > small {
+    color: rgb(198, 198, 198);
+}
+
+.panel {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #3e3e3e;
+    font-size: 1.5em;
+}
+
+.panel-title {
+    font-size: 1.1em;
+}
+
+.welcome_link {
+    color: rgb(0, 71, 255);
+}
+
+.welcome_link:hover, .welcome_link:focus, .welcome_link:active {
+    color: rgb(0, 37, 171);
+}
