@@ -12,6 +12,7 @@
         "48": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png",
         "64": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png"
     },
+    "permissions": { "private-browsing": true },
     "preferences": [{
         "title": "Enable Owl on startup",
         "name": "owlOnStartup",
