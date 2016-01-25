@@ -5,7 +5,7 @@
         filter: invert(95%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
         overflow: auto;
     }
-    img, iframe, video, *:not(object):not(body)>embed, object, *[style*="background:url"]:empty, *[style*="background-image:url"]:empty, *[style*="background: url"]:empty, *[style*="background-image: url"]:empty, canvas {
+    img, iframe, video, *:not(object):not(body)>embed, object, *[style*="background:url"]:empty, *[style*="background-image:url"]:empty, *[style*="background: url"]:empty, *[style*="background-image: url"]:empty {
         filter: brightness(95%) invert(105%) hue-rotate(180deg) !important;
     }
 

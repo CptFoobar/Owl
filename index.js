@@ -1,9 +1,10 @@
 /* SDK Modules */
 const self = require("sdk/self");
 const data = self.data;
-const tabs = require("sdk/tabs");
+const pageMod = require("sdk/page-mod");
 const prefSet = require("sdk/simple-prefs");
 const ss = require("sdk/simple-storage");
+const tabs = require("sdk/tabs");
 const { attach, detach } = require('sdk/content/mod');
 const { Hotkey } = require("sdk/hotkeys");
 const { Style } = require('sdk/stylesheet/style');
@@ -19,12 +20,13 @@ var activateOnStartup = prefSet.prefs.owlOnStartup;
 var alwaysClassic = prefSet.prefs.alwaysClassic;
 var owlMode = activateOnStartup;
 var attachStyle = alwaysClassic ? classicStyle : invertStyle;
-const breakingSiteRoots = ["techcrunch.com"];
 
 /* Whitelist and Classic Theme list */
-var classicSiteList = ss.storage.classicSiteList || [];
 var whiteSites = ss.storage.whiteSites || [];
+// Set techcrunch.com as default classic
+var classicSiteList = ss.storage.classicSiteList || ["techcrunch.com"];
 
+/* Owl Toggle Button */
 var owlButton = ToggleButton({
     id: "owl-button",
     label: "Owl " + (activateOnStartup ? "On" : "Off"),
@@ -36,6 +38,7 @@ var owlButton = ToggleButton({
     onChange: togglePanel
 });
 
+/* Popup panel */
 var panel = require("sdk/panel").Panel({
     width: 250,
     height: 400,
@@ -48,6 +51,7 @@ var panel = require("sdk/panel").Panel({
     }
 });
 
+/* Owl Hotkeys: Shift-Alt-D to toggle Owl, Shift-Alt-C to switch theme */
 var owlHotKey = Hotkey({
     combo: "alt-shift-d",
     onPress: function() {
@@ -71,10 +75,12 @@ var classicHotkey = Hotkey({
   }
 });
 
+/* Panel show listener */
 panel.on("show", function() {
     updatePanelConfig();
 });
 
+/* Panel port message listeners */
 panel.port.on("toggle_owl", function(payload) {
     owlMode = payload.value;
     setOwl(owlMode);
@@ -84,8 +90,7 @@ panel.port.on("use_classic_theme", function(payload) {
     var host = getDomainFromUrl(tabs.activeTab.url);
     if (host.length > 0) {
         var index = indexInArray(host, classicSiteList);
-        if (payload.value)
-            manipClassic(index, host);
+        manipClassic(index, host);
         refreshOwl();
     }
 });
@@ -117,24 +122,61 @@ if (activateOnStartup) {
     setOwl(owlMode);
 }
 
+/* Listen for Owl startup setting change.
+ * Come to think of it, it doesn't really matter since changes for setting can
+ * take place at startup, so listening for change during the session makes
+ * little sense ¯\_(ツ)_/¯
+ */
 prefSet.on("alwaysClassic", onAlwaysClassicChange);
 
 /* Open welcome page on install / upgrade */
 if (self.loadReason == "install" || self.loadReason == "upgrade")
     require("sdk/tabs").open(data.url("markup/welcome.html"));
 
+/* Set pagemod for configuration site */
+var configMod = pageMod.PageMod({
+    include: "resource://owl-comfortable-reading-addon/data/markup/configure_sites.html",
+    contentScriptFile: data.url("js/configurationContentScript.js"),
+    onAttach: function(worker) {
+        worker.port.emit("configuredSites", {
+            "whitelistSites": whiteSites,
+            "classicSites": classicSiteList
+        });
+        worker.port.on("deleteClassicSite", function(payload) {
+            var index = indexInArray(payload.site, classicSiteList);
+            console.log("removing classic site: " + payload.site + " at index: " + index);
+            if (index > -1) {
+                classicSiteList.splice(index, 1);
+                ss.storage.classicSiteList = classicSiteList;
+            }
+        });
+        worker.port.on("deleteWhitelistSite", function(payload) {
+            var index = indexInArray(payload.site, whiteSites);
+            console.log("remove whitelist site: " + payload.site + " at index: " + index);
+            if (index > -1) {
+                whiteSites.splice(index, 1);
+                ss.storage.whiteSites = whiteSites;
+            }
+        });
+    }
+});
+
+/* Open settings page on preference button click */
+prefSet.on("configSitesPref", function() {
+    tabs.open("resource://owl-comfortable-reading-addon/data/markup/configure_sites.html");
+})
 
 function manipClassic(index, host) {
     if (index == -1) {
         classicSiteList.push(host);
         ss.storage.classicSiteList = classicSiteList;
-        detach(attachStyle, tabs.activeTab);
+        detach(invertStyle, tabs.activeTab);
         attach(classicStyle, tabs.activeTab);
     } else {
         classicSiteList.splice(index, 1);
         ss.storage.classicSiteList = classicSiteList;
         detach(classicStyle, tabs.activeTab);
-        attach(attachStyle, tabs.activeTab);
+        attach(invertStyle, tabs.activeTab);
     }
 }
 
@@ -180,11 +222,6 @@ function getStyleForUrl(tabUrl) {
 
     /* Default for all websites is attachStyle */
     var tabStyle = attachStyle;
-
-    /* Check if site is known breaking site */
-    for (var j = 0; j < breakingSiteRoots.length; j++)
-        if (tabUrl.indexOf(breakingSiteRoots[j]) > -1)
-            tabStyle = classicStyle;
 
     /* Check if user has selected classic theme for given site */
     for (var j = 0; j < classicSiteList.length; j++)
@@ -265,4 +302,20 @@ function openTestSites() {
 };
 
 setTabListeners();
+
+function clearSettings() {
+    delete ss.storage.classicSiteList;
+    delete ss.storage.whiteSites;
+    delete ss.storage.alwaysClassic;
+}
+
+exports.onUnload = function(reason) {
+    // Remove PageMod
+    configMod.destroy();
+    // Clear all settings if add-on is uninstalled
+    if (reason === "uninstall")
+        clearSettings();
+};
+
+
 //openTestSites();

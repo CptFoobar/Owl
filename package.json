@@ -12,19 +12,26 @@
         "48": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png",
         "64": "resource://owl-comfortable-reading-addon/data/icons/enabled-64.png"
     },
-    "permissions": { "private-browsing": true },
+    "permissions": {
+        "private-browsing": true
+    },
     "preferences": [{
         "title": "Enable Owl on startup",
         "name": "owlOnStartup",
         "type": "bool",
         "description": "Turn on Owl as soon as Firefox is started",
         "value": false
-    },{
+    }, {
         "title": "Always use Classic theme",
         "name": "alwaysClassic",
         "type": "bool",
         "description": "Use only the Classic Owl theme (used in v1.1.3) for all websites",
         "value": false
+    }, {
+        "title": "Configure Website Preference",
+        "name": "configSitesPref",
+        "type": "control",
+        "label": "Open Preferences"
     }],
     "license": "MIT"
 }

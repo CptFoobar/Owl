@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Owl - Configure Websites For Special Treatment</title>
+
+    <link rel="stylesheet" href="../lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/configureSites.css">
+</head>
+
+<body>
+    <div class="container col-xs-8 col-xs-push-2">
+        <div class="page-header text-center">
+            <h1>Owl &nbsp;
+                <small>For comfortable reading</small>
+            </h1>
+        </div>
+        <div class="row">
+            <!-- Header for Disabled Sites -->
+            <div class="col-xs-8 col-xs-push-2">
+                <input type="text" class="form-control input input-lg text-center" value="Disable Owl On These Websites" disabled="disabled" style="cursor: default;">
+            </div>
+        </div>
+        <div class="row">
+            <br>
+            <ul class="list-group" id="whitelist_sites">
+                <!-- Disabled sites filled here dynamically -->
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Header for Classic theme sites -->
+            <div class="col-xs-8 col-xs-push-2">
+                <input type="text" class="form-control input input-lg text-center" value="Use Classic Theme On These Websites" disabled="disabled" style="cursor: default;">
+            </div>
+        </div>
+        <div class="row">
+            <br>
+            <ul class="list-group" id="classic_sites">
+                <!-- Classic theme sites filled here dynamically -->
+            </ul>
+        </div>
+        <hr>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../lib/jquery/jquery-1.11.3.min.js"></script>
+    <!-- Interaction Handler -->
+    <script src="../js/configureSites.js" charset="utf-8"></script>
+</body>
+
+</html>

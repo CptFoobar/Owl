@@ -29,5 +29,3 @@
         });
     });
 }());
-
-// Panel is a difference window!!
