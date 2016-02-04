@@ -68,3 +68,15 @@
 p {
     cursor: default;
 }
+
+.footer-heart {
+    font-size: 1.4em;
+    color: #FF2626;
+    line-height: 1;
+}
+
+.footer-heart:hover, .footer-heart:active, .footer-heart:focus {
+    color: #d41e1e;
+    text-decoration: none;
+    outline: none;
+}

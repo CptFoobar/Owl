@@ -1,0 +1,4 @@
+.pdfViewer {
+  filter: invert(90.0%) hue-rotate(180deg) brightness(90.0%) grayscale(10%);
+  background-color: #dfdfdf;
+}

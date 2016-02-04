@@ -13,11 +13,13 @@ const { ToggleButton } = require("sdk/ui/button/toggle");
 /* Set styles to be used */
 const classicStyle = Style({ uri: "./css/owlClassic.css" });
 const invertStyle = Style({ uri: "./css/owlInverted.css" });
+const pdfInversionStyle = Style({ uri: "./css/pdfInversion.css" });
 
 /* Init variables */
 var showPanel = true;
 var activateOnStartup = prefSet.prefs.owlOnStartup;
 var alwaysClassic = prefSet.prefs.alwaysClassic;
+var invertPdf = prefSet.prefs.invertPdf;
 var owlMode = activateOnStartup;
 var attachStyle = alwaysClassic ? classicStyle : invertStyle;
 
@@ -128,6 +130,7 @@ if (activateOnStartup) {
  * little sense ¯\_(ツ)_/¯
  */
 prefSet.on("alwaysClassic", onAlwaysClassicChange);
+prefSet.on("invertPdf", onInvertPdfChange);
 
 /* Open welcome page on install / upgrade */
 if (self.loadReason == "install" || self.loadReason == "upgrade")
@@ -144,7 +147,6 @@ var configMod = pageMod.PageMod({
         });
         worker.port.on("deleteClassicSite", function(payload) {
             var index = indexInArray(payload.site, classicSiteList);
-            console.log("removing classic site: " + payload.site + " at index: " + index);
             if (index > -1) {
                 classicSiteList.splice(index, 1);
                 ss.storage.classicSiteList = classicSiteList;
@@ -152,7 +154,6 @@ var configMod = pageMod.PageMod({
         });
         worker.port.on("deleteWhitelistSite", function(payload) {
             var index = indexInArray(payload.site, whiteSites);
-            console.log("remove whitelist site: " + payload.site + " at index: " + index);
             if (index > -1) {
                 whiteSites.splice(index, 1);
                 ss.storage.whiteSites = whiteSites;
@@ -164,7 +165,7 @@ var configMod = pageMod.PageMod({
 /* Open settings page on preference button click */
 prefSet.on("configSitesPref", function() {
     tabs.open("resource://owl-comfortable-reading-addon/data/markup/configure_sites.html");
-})
+});
 
 function manipClassic(index, host) {
     if (index == -1) {
@@ -178,7 +179,7 @@ function manipClassic(index, host) {
         detach(classicStyle, tabs.activeTab);
         attach(invertStyle, tabs.activeTab);
     }
-}
+};
 
 function updatePanelConfig() {
     panel.port.emit("tab_config", {
@@ -187,7 +188,7 @@ function updatePanelConfig() {
         whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1),
         alwaysClassic: alwaysClassic
     });
-}
+};
 
 function setOwl(oMode) {
     owlButton.icon = data.url("icons/" + (oMode ? "enabled" : "disabled") + "-64.png");
@@ -203,7 +204,14 @@ function setOwl(oMode) {
                 detach(style, tabs[i]);
         }
     }
+    setPdfInversionMode((invertPdf && oMode));
+};
 
+function setPdfInversionMode(pdfMode) {
+    for (let i = 0; i < tabs.length; i++) {
+        if (pdfMode) attach(pdfInversionStyle, tabs[i]);
+        else detach(pdfInversionStyle, tabs[i]);
+    }
 };
 
 function togglePanel(state) {
@@ -250,10 +258,14 @@ function getDomainFromUrl(url) {
 function tabListener(tab) {
     tabStyle = getStyleForUrl(tab.url);
     if (tabStyle != "no_style") {
-        if (owlMode)
+        if (owlMode) {
             attach(tabStyle, tab);
-        else
+            if (invertPdf) attach(pdfInversionStyle, tab);
+        }
+        else {
             detach(tabStyle, tab);
+            detach(pdfInversionStyle, tab);
+        }
     }
 };
 
@@ -279,26 +291,18 @@ function onAlwaysClassicChange(prefName) {
             attachStyle = invertStyle;
         setOwl(owlMode);
     }
-}
+};
+
+function onInvertPdfChange(prefName) {
+    if (prefName === "invertPdf") {
+        invertPdf = prefSet.prefs.invertPdf;
+        setPdfInversionMode(invertPdf);
+    }
+};
 
 function refreshOwl() {
     setOwl(false);
     setOwl(owlMode);
-}
-
-function openTestSites() {
-    var testSites = [
-        "techcrunch.com",
-        "gizmodo.com",
-        "engadget.com",
-        "facebook.com",
-        "www.google.com/search?tbm=isch&q=star+wars",
-        "stackoverflow.com/questions/26222367/how-to-change-excluded-urls-in-mozilla-sdk-page-mod-dynamically",
-        "accounts.google.com"
-    ]
-
-    for (let i = 0; i < testSites.length; i++)
-        tabs.open("http://" + testSites[i]);
 };
 
 setTabListeners();
@@ -307,7 +311,7 @@ function clearSettings() {
     delete ss.storage.classicSiteList;
     delete ss.storage.whiteSites;
     delete ss.storage.alwaysClassic;
-}
+};
 
 exports.onUnload = function(reason) {
     // Remove PageMod
@@ -316,6 +320,3 @@ exports.onUnload = function(reason) {
     if (reason === "uninstall")
         clearSettings();
 };
-
-
-//openTestSites();
