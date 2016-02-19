@@ -13,7 +13,7 @@
         background-color: #2b2b2b;
     }
 
-    *:full-screen {
+    :-moz-full-screen * {
         filter: none !important;
     }
 
@@ -40,7 +40,7 @@
     .pE, .HH{
         filter: brightness(90%) invert(95%) hue-rotate(180deg) !important;
     }
-    .du.ew {
+    .du.ew, div.l9 > div:not(.I7) {
         filter: invert(95%);
     }
 

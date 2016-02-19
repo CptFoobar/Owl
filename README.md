@@ -1,4 +1,4 @@
-# Owl
+# Owl ![](https://img.shields.io/badge/Firefox-Extension-orange.svg)
 ### Firefox add-on for comfortable reading
 
 
@@ -16,7 +16,7 @@ A regular wikipedia page:
 <br />
 Same page with Owl enabled:
 
-![Elon Musk Wikipedia-Owl](https://addons.cdn.mozilla.net/user-media/previews/full/160/160446.png?modified=1435649719)
+![Elon Musk Wikipedia-Owl](https://addons.cdn.mozilla.net/user-media/previews/full/170/170558.png?modified=1453758412)
 
 <br />
 StackOverflow page with code snippet:
@@ -26,8 +26,12 @@ StackOverflow page with code snippet:
 <br />
 Code snippet with syntax highlighting in Owl:
 
-![SO-Snippet](https://addons.cdn.mozilla.net/user-media/previews/full/160/160672.png?modified=1435649719)
+![SO-Snippet](https://addons.cdn.mozilla.net/user-media/previews/full/170/170559.png?modified=1453758412)
 
+<br />
+Owl Panel to control the add-on's behaviour:
+
+![Owl Panel](https://addons.cdn.mozilla.net/user-media/previews/full/170/170561.png?modified=1453758412)
 
 ## Install
 To install this add-on in Firefox (version 38.0 and above), just follow [this](https://addons.mozilla.org/en-US/firefox/addon/owl/) link and install.
