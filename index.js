@@ -8,7 +8,7 @@ const tabs = require("sdk/tabs");
 const { attach, detach } = require('sdk/content/mod');
 const { Hotkey } = require("sdk/hotkeys");
 const { Style } = require('sdk/stylesheet/style');
-const { ToggleButton } = require("sdk/ui/button/toggle");
+const { MenuButton } = require("./data/lib/menu_button/menu-button");
 
 /* Set styles to be used */
 const classicStyle = Style({ uri: "./css/owlClassic.css" });
@@ -29,7 +29,7 @@ var whiteSites = ss.storage.whiteSites || [];
 var classicSiteList = ss.storage.classicSiteList || ["techcrunch.com"];
 
 /* Owl Toggle Button */
-var owlButton = ToggleButton({
+var owlButton = MenuButton({
     id: "owl-button",
     label: "Owl " + (activateOnStartup ? "On" : "Off"),
     icon: {
@@ -37,8 +37,18 @@ var owlButton = ToggleButton({
         "32": data.url("icons/" + (activateOnStartup ? "enabled" : "disabled") + "-32.png"),
         "64": data.url("icons/" + (activateOnStartup ? "enabled" : "disabled") + "-64.png")
     },
-    onChange: togglePanel
+    onClick: handleClick
 });
+
+function handleClick(state, isMenu) {
+    if (isMenu) {
+        togglePanel(state)
+    } else {
+       owlMode = !owlMode;
+       setOwl(owlMode);
+    }
+}
+
 
 /* Popup panel */
 var panel = require("sdk/panel").Panel({
@@ -59,6 +69,7 @@ var owlHotKey = Hotkey({
     onPress: function() {
         owlMode = !owlMode;
         setOwl(owlMode);
+        updatePanelConfig();
   }
 });
 
@@ -215,10 +226,12 @@ function setPdfInversionMode(pdfMode) {
 };
 
 function togglePanel(state) {
-    if (state.checked) {
+    if (!panel.isShowing) {
             panel.show({
             position: owlButton
         });
+    } else {
+        panel.hide();
     }
 };
 
