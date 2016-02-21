@@ -1,4 +1,4 @@
-# Owl ![](https://img.shields.io/badge/Firefox-Extension-orange.svg)
+# Owl [![Fx-Addon](https://img.shields.io/badge/Firefox-Add--on-orange.svg)](https://addons.mozilla.org/en-US/firefox/addon/owl/) [![](https://img.shields.io/badge/Chrome-Extension-yellow.svg)](https://chrome.google.com/webstore/detail/blink-new-tab/kakaolkgegapcgdjdmlmcigejblohpkh?utm_source=gmail)
 ### Firefox add-on for comfortable reading
 
 
