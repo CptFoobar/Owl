@@ -9,29 +9,29 @@
 
 	html,
 	body {
-        background: -moz-linear-gradient(top, #1e1e1e, #1e1e1e) #1e1e1e repeat !important;
+        background: -moz-linear-gradient(top, #1f1f1f, #1f1f1f) #1f1f1f repeat !important;
     }
 
     html {
-        background: #1e1e1e !important;
+        background: #1f1f1f !important;
         color: #AAAAAA !important;
         border-color: #333 !important;
     }
 
     div {
-        background: #1e1e1e !important;
+        background: #1f1f1f !important;
         color: #B6B6B6 !important;
     }
 
     a {
-        background-color: #1e1e1e !important;
+        background-color: #1f1f1f !important;
         border-color: #AEAEAE !important;
     }
 
     input,
     textarea {
 		-moz-appearance: none !important;
-        background-color: #1e1e1e !important;
+        background-color: #1f1f1f !important;
         color: #EBEBEB !important;
         outline: none !important;
         background-image: none;
@@ -55,12 +55,12 @@
     }
 
     ul, li, th, td, dl, dd, dt, ol, p, article, section {
-        background-color: #1e1e1e !important;
+        background-color: #1f1f1f !important;
         color: #AAAAAA !important;
     }
 
     h1, h2, h3, h4, h5, h6 {
-        background-color: #1e1e1e !important;
+        background-color: #1f1f1f !important;
         color: #B7B7B7 !important;
     }
 
