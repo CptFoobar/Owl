@@ -53,7 +53,7 @@ function handleClick(state, isMenu) {
 /* Popup panel */
 var panel = require("sdk/panel").Panel({
     width: 250,
-    height: 400,
+    height: 425,
     contentURL: data.url("markup/panel.html"),
     contentScriptFile: [data.url("lib/jquery/jquery-1.11.3.min.js"),
                         data.url("js/panel.js"),

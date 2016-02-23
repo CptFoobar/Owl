@@ -12,7 +12,7 @@
 .owl_logo {
     background: rgba(0, 0, 0, 0.25) url("../icons/Owl-Logo.png") no-repeat scroll 50% 50%;
     background-size: cover;
-    min-height: 100px;
+    min-height: 90px;
 }
 
 .vspace {
@@ -47,8 +47,8 @@
 }
 
 .footer_divider {
-    margin-top: 9px;
-    margin-bottom: 9px;
+    margin-top: 17px;
+    margin-bottom: 5px;
     border-width: 1px 0px 0px;
     border-style: solid none none;
     border-color: #DDD -moz-use-text-color -moz-use-text-color;
@@ -79,4 +79,12 @@ p {
     color: #d41e1e;
     text-decoration: none;
     outline: none;
+}
+
+.configure-sites {
+    background-color: rgb(41, 119, 236);
+}
+
+.configure-sites:focus, .configure-sites:hover, .configure-sites:active  {
+    background-color: rgb(41, 119, 236);
 }
