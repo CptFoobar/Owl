@@ -32,11 +32,7 @@ var classicSiteList = ss.storage.classicSiteList || ["techcrunch.com"];
 var owlButton = MenuButton({
     id: "owl-button",
     label: "Owl " + (activateOnStartup ? "On" : "Off"),
-    icon: {
-        "16": data.url("icons/" + (activateOnStartup ? "enabled" : "disabled") + "-16.png"),
-        "32": data.url("icons/" + (activateOnStartup ? "enabled" : "disabled") + "-32.png"),
-        "64": data.url("icons/" + (activateOnStartup ? "enabled" : "disabled") + "-64.png")
-    },
+    icon: iconSet(activateOnStartup),
     onClick: handleClick
 });
 
@@ -46,6 +42,14 @@ function handleClick(state, isMenu) {
     } else {
        owlMode = !owlMode;
        setOwl(owlMode);
+    }
+}
+
+function iconSet(condition) {
+    return {
+        "16": data.url("icons/" + (condition ? "enabled" : "disabled") + "-16.png"),
+        "32": data.url("icons/" + (condition ? "enabled" : "disabled") + "-32.png"),
+        "64": data.url("icons/" + (condition ? "enabled" : "disabled") + "-64.png")
     }
 }
 
@@ -202,7 +206,7 @@ function updatePanelConfig() {
 };
 
 function setOwl(oMode) {
-    owlButton.icon = data.url("icons/" + (oMode ? "enabled" : "disabled") + "-64.png");
+    owlButton.icon = iconSet(oMode)
     owlButton.label = "Owl " + (oMode ? "On" : "Off");
     for (let i = 0; i < tabs.length; i++) {
         var style = getStyleForUrl(tabs[i].url);
