@@ -1,7 +1,7 @@
 {
     "title": "Owl - For comfortable reading",
     "name": "owl-comfortable-reading-addon",
-    "version": "1.2.6",
+    "version": "1.3.0",
     "description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
     "main": "index.js",
     "author": "Sidhant Sharma [:tk]",
@@ -32,6 +32,12 @@
         "name": "invertPdf",
         "type": "bool",
         "description": "Invert color scheme for PDF files",
+        "value": true
+    }, {
+        "title": "Allow in Incognito",
+        "name": "allowIncognito",
+        "type": "bool",
+        "description": "Allow Owl to work in Incognito windows",
         "value": true
     }, {
         "title": "Configure Website Preference",

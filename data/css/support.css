@@ -1,0 +1,23 @@
+html, body {
+    overflow: hidden;
+}
+
+.support-jumbotron {
+    margin-top: 25px;
+    background-color: rgb(247, 222, 254);
+    padding-top: 10px;
+}
+
+.support-jumbotron > h2 {
+    color: rgb(73, 3, 24);
+    font-size: 1.8em;
+}
+
+.support-jumbotron > p {
+    font-size: 1.15em;
+}
+
+i.heart:before {
+    content: "\2764";
+    font-size: 1.1em;
+}
