@@ -27,18 +27,24 @@ const WELCOME_PAGE_URL = data.url("markup/welcome.html");
 // Week in seconds
 const REMINDER_INTERVAL = 1000 * 60 * 60 * 24 * 7;
 
+const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "amazon.in",
+                        "tomshardware.com", "pcpartpicker.com", "ebay.ca",
+                        "ebay.in"];
+
 /* Init variables */
 var activateOnStartup = prefSet.prefs.owlOnStartup;
 var alwaysClassic = prefSet.prefs.alwaysClassic;
 var invertPdf = prefSet.prefs.invertPdf;
 var owlMode = activateOnStartup;
 var allowIncognito = prefSet.prefs.allowIncognito;
-var attachStyle = alwaysClassic ? classicStyle : invertStyle;
+var defaultStyle = alwaysClassic ? classicStyle : invertStyle;
+var localFiles = prefSet.prefs.localFiles;
 
-/* Whitelist and Classic Theme list */
-var whiteSites = ss.storage.whiteSites || [];
+/* Site configuration lists */
+var alwaysDisableSites = ss.storage.whiteSites || [];
+var alwaysEnableSites = ss.storage.alwaysEnableSites || [];
 // Set techcrunch.com as default classic
-var classicSiteList = ss.storage.classicSiteList || ["techcrunch.com"];
+var classicSiteList = ss.storage.classicSiteList || DEFAULT_CLASSICS;
 
 /* Owl Toggle Button */
 var owlButton = MenuButton({
@@ -96,7 +102,7 @@ var classicHotkey = Hotkey({
 /* Owl popup panel */
 var owlPanel = panel.Panel({
     width: 250,
-    height: 425,
+    height: 475,
     contentURL: OWL_PANEL_URL,
     contentScriptFile: [data.url("lib/jquery/jquery-1.11.3.min.js"),
                         data.url("js/panel.js"),
@@ -118,7 +124,7 @@ owlPanel.port.on("use_classic_theme", function(payload) {
     var host = getDomainFromUrl(tabs.activeTab.url);
     if (host.length > 0) {
         var index = indexInArray(host, classicSiteList);
-        manipClassic(index, host);
+        manipClassic(index, host, payload.value);
         refreshOwl();
     }
 });
@@ -127,18 +133,40 @@ owlPanel.port.on("disable_website", function(payload) {
     var host = getDomainFromUrl(tabs.activeTab.url);
     var tabStyle = getStyleForUrl(tabs.activeTab.url);
     if (host.length > 0) {
-        var index = indexInArray(host, whiteSites);
+        var index = indexInArray(host, alwaysDisableSites);
         if (payload.value) {
             if (index == -1) {
-                whiteSites.push(host);
-                ss.storage.whiteSites = whiteSites;
+                alwaysDisableSites.push(host);
+                ss.storage.whiteSites = alwaysDisableSites;
                 detach(tabStyle, tabs.activeTab);
             }
         } else {
-            whiteSites.splice(index, 1);
-            ss.storage.whiteSites = whiteSites;
+            alwaysDisableSites.splice(index, 1);
+            ss.storage.whiteSites = alwaysDisableSites;
             if (tabStyle != "no_style")
                 attach(tabStyle, tabs.activeTab);
+        }
+    }
+    refreshOwl();
+});
+
+owlPanel.port.on("always_enable_website", function(payload) {
+    var host = getDomainFromUrl(tabs.activeTab.url);
+    var tabStyle = getStyleForUrl(tabs.activeTab.url);
+    if (host.length > 0) {
+        var index = indexInArray(host, alwaysEnableSites);
+        if (payload.value) {
+            if (index == -1) {
+                alwaysEnableSites.push(host);
+                ss.storage.alwaysEnableSites = alwaysEnableSites;
+                detach(tabStyle, tabs.activeTab);
+                attach(tabStyle, tabs.activeTab);
+            }
+        } else {
+            alwaysEnableSites.splice(index, 1);
+            ss.storage.alwaysEnableSites = alwaysEnableSites;
+            if (tabStyle != "no_style")
+                detach(tabStyle, tabs.activeTab);
         }
     }
     refreshOwl();
@@ -172,10 +200,11 @@ function hideSupportPanel() {
 prefSet.on("alwaysClassic", onAlwaysClassicChange);
 prefSet.on("invertPdf", onInvertPdfChange);
 prefSet.on("allowIncognito", onAllowPrivate);
-
-/* Open welcome page on install/upgrade */
-if (self.loadReason == "install" || self.loadReason == "upgrade")
-    tabs.open(WELCOME_PAGE_URL);
+prefSet.on("localFiles", onLocalFilesChange);
+/* Open settings page on preference button click */
+prefSet.on("configSitesPref", function() {
+    tabs.open(CONFIG_PAGE_URL);
+});
 
 /* Set pagemod for configuration site */
 var configMod = pageMod.PageMod({
@@ -183,8 +212,9 @@ var configMod = pageMod.PageMod({
     contentScriptFile: data.url("js/configurationContentScript.js"),
     onAttach: function(worker) {
         worker.port.emit("configuredSites", {
-            "whitelistSites": whiteSites,
-            "classicSites": classicSiteList
+            "whitelistSites": alwaysDisableSites,
+            "classicSites": classicSiteList,
+            "alwaysEnableSites": alwaysEnableSites
         });
         worker.port.on("deleteClassicSite", function(payload) {
             var index = indexInArray(payload.site, classicSiteList);
@@ -194,27 +224,29 @@ var configMod = pageMod.PageMod({
             }
         });
         worker.port.on("deleteWhitelistSite", function(payload) {
-            var index = indexInArray(payload.site, whiteSites);
+            var index = indexInArray(payload.site, alwaysDisableSites);
             if (index > -1) {
-                whiteSites.splice(index, 1);
-                ss.storage.whiteSites = whiteSites;
+                alwaysDisableSites.splice(index, 1);
+                ss.storage.whiteSites = alwaysDisableSites;
+            }
+        });
+        worker.port.on("deleteEnabledSite", function(payload) {
+            var index = indexInArray(payload.site, alwaysEnableSites);
+            if (index > -1) {
+                alwaysEnableSites.splice(index, 1);
+                ss.storage.alwaysEnableSites = alwaysEnableSites;
             }
         });
     }
 });
 
-/* Open settings page on preference button click */
-prefSet.on("configSitesPref", function() {
-    tabs.open(CONFIG_PAGE_URL);
-});
-
-function manipClassic(index, host) {
-    if (index == -1) {
+function manipClassic(index, host, toAdd) {
+    if (index == -1 && toAdd) {
         classicSiteList.push(host);
         ss.storage.classicSiteList = classicSiteList;
         detach(invertStyle, tabs.activeTab);
         attach(classicStyle, tabs.activeTab);
-    } else {
+    } else if (!toAdd) {
         classicSiteList.splice(index, 1);
         ss.storage.classicSiteList = classicSiteList;
         detach(classicStyle, tabs.activeTab);
@@ -225,11 +257,19 @@ function manipClassic(index, host) {
 function updatePanelConfig() {
     owlPanel.port.emit("tab_config", {
         mode: owlMode,
-        classic: ((indexInArray(getDomainFromUrl(tabs.activeTab.url), classicSiteList) > -1) || alwaysClassic),
-        whitelist: (indexInArray(getDomainFromUrl(tabs.activeTab.url), whiteSites) > -1),
+        classic: activeTabInList(classicSiteList),
+        alwaysDisable: activeTabInList(alwaysDisableSites),
+        alwaysEnable: activeTabInList(alwaysEnableSites),
         alwaysClassic: alwaysClassic
     });
 };
+
+function activeTabInList(siteList) {
+    var domain = getDomainFromUrl(tabs.activeTab.url);
+    if (domain.length > 0)
+        return indexInArray(domain, siteList) > -1;
+    else return false;
+}
 
 function setOwl(oMode) {
     owlButton.icon = iconSet(oMode);
@@ -239,6 +279,11 @@ function setOwl(oMode) {
         if (!style || style == "no_style") {
             continue;
         } else {
+            if (indexInArray(getDomainFromUrl(tabs[i].url), alwaysEnableSites) > -1) {
+                detach(style, tabs[i]);
+                attach(style, tabs[i]);
+                continue;
+            }
             if (oMode) {
                 var tabPrivate = privateBrowsing.isPrivate(tabs[i]);
                 if (!tabPrivate || (tabPrivate && allowIncognito))
@@ -251,6 +296,7 @@ function setOwl(oMode) {
                  */
                 detach(style, tabs[i]);
             }
+
         }
     }
     setPdfInversionMode((invertPdf && oMode));
@@ -275,12 +321,12 @@ function togglePanel(state) {
 
 function getStyleForUrl(tabUrl) {
     /* Check if site is whitelisted */
-    for (var j = 0; j < whiteSites.length; j++)
-        if (tabUrl.indexOf(whiteSites[j]) > -1)
+    for (var j = 0; j < alwaysDisableSites.length; j++)
+        if (tabUrl.indexOf(alwaysDisableSites[j]) > -1)
             return "no_style";
 
-    /* Default for all websites is attachStyle */
-    var tabStyle = attachStyle;
+    /* Default for all websites is defaultStyle */
+    var tabStyle = defaultStyle;
 
     /* Check if user has selected classic theme for given site */
     for (var j = 0; j < classicSiteList.length; j++)
@@ -292,6 +338,9 @@ function getStyleForUrl(tabUrl) {
 
 function getDomainFromUrl(url) {
     var domain = "";
+    if (url.indexOf("file://") > -1)
+        if (localFiles) return url;
+        else return "";
     //find & remove protocol (http, ftp, etc.) and get domain
     if (url.indexOf("://") > -1) {
         domain = url.split('/')[2];
@@ -335,12 +384,11 @@ function indexInArray(url, urlList) {
 function onAlwaysClassicChange(prefName) {
     if (prefName === "alwaysClassic") {
         alwaysClassic = prefSet.prefs.alwaysClassic;
-        setOwl(false);
         if (alwaysClassic)
-            attachStyle = classicStyle;
+            defaultStyle = classicStyle;
         else
-            attachStyle = invertStyle;
-        setOwl(owlMode);
+            defaultStyle = invertStyle;
+        refreshOwl();
     }
 }
 
@@ -348,12 +396,20 @@ function onInvertPdfChange(prefName) {
     if (prefName === "invertPdf") {
         invertPdf = prefSet.prefs.invertPdf;
         setPdfInversionMode(invertPdf);
+        refreshOwl();
     }
 }
 
 function onAllowPrivate(prefName) {
     if (prefName === "allowIncognito") {
         allowIncognito = prefSet.prefs.allowIncognito;
+        refreshOwl();
+    }
+}
+
+function onLocalFilesChange(prefName) {
+    if (prefName === "localFiles") {
+        localFiles = prefSet.prefs.localFiles;
         refreshOwl();
     }
 }
@@ -374,14 +430,6 @@ function owlInit() {
 }
 
 function showSupportPanel() {
-    /*
-    * Check if support reminder was initialised. If it was, check if we need
-    * to show reminder.
-    */
-    if (!ss.storage.lastReminder) {
-        ss.storage.showReminder = true;
-        ss.storage.lastReminder = Date.now();
-    }
     if (ss.storage.showReminder && !owlPanel.isShowing &&
       (Date.now() >= ss.storage.lastReminder + REMINDER_INTERVAL)) {
         supportPanel.show({
@@ -396,6 +444,7 @@ function clearSettings() {
     delete ss.storage.classicSiteList;
     delete ss.storage.whiteSites;
     delete ss.storage.alwaysClassic;
+    delete ss.storage.alwaysEnableSites;
     delete ss.storage.showReminder;
 }
 
@@ -406,5 +455,19 @@ exports.onUnload = function(reason) {
     if (reason === "uninstall")
         clearSettings();
 };
+
+/* Main executio starts here */
+
+if (self.loadReason == "install") {
+    ss.storage.classicSiteList = classicSiteList;
+    ss.storage.whiteSites = alwaysDisableSites;
+    ss.storage.alwaysEnableSites = alwaysEnableSites;
+    ss.storage.showReminder = true;
+    ss.storage.lastReminder = Date.now();
+}
+
+/* Open welcome page on install/upgrade */
+if (self.loadReason == "install" || self.loadReason == "upgrade")
+    tabs.open(WELCOME_PAGE_URL + (self.loadReason == "upgrade" ? "?update=y" : ""));
 
 owlInit();

@@ -9,11 +9,14 @@
                 for (var i = 0; i < message.payload.classicSites.length; i++)
                     $("#classic_sites").append(getEntryForUrl(message.payload.classicSites[i]));
 
+                for (var i = 0; i < message.payload.alwaysEnableSites.length; i++)
+                    $("#always_enable_sites").append(getEntryForUrl(message.payload.alwaysEnableSites[i]));
+
                 checkEmptyLists();
 
                 $(".btn-remove-site").click(function(event) {
                     var sibling = $(event.target).siblings()[0];
-                    var intent = ($(sibling).parent().parent()[0].id == "classic_sites" ? "deleteClassicSite" : "deleteWhitelistSite")
+                    var intent = getRemoveIntent($(sibling).parent().parent()[0].id)
                     window.postMessage({
                         target: "OwlBase",
                         intent: intent,
@@ -47,6 +50,17 @@
                     '<li class="list-group-item text-center no_sites">' +
                         'No sites are set to use Classic Theme.' +
                     '</li>');
+        if ($("#always_enable_sites").children().length === 0)
+            $("#always_enable_sites").append(
+                    '<li class="list-group-item text-center no_sites">' +
+                        'No sites are set to use Classic Theme.' +
+                    '</li>');
+    }
+
+    function getRemoveIntent(id) {
+        if (id == "classic_sites")    return "deleteClassicSite";
+        else if (id == "always_enable_sites")   return "deleteEnabledSite";
+        else return "deleteWhitelistSite";
     }
 
 }());

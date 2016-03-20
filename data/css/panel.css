@@ -9,6 +9,18 @@
     width: 75px;
 }
 
+.toggle.setting,
+.toggle-on.setting,
+.toggle-off.setting {
+    border-radius: 15px;
+}
+
+.toggle.setting .toggle-handle {
+    border-radius: 50%;
+    width: 15px
+}
+
+
 .owl_logo {
     background: rgba(0, 0, 0, 0.25) url("../icons/Owl-Logo.png") no-repeat scroll 50% 50%;
     background-size: cover;

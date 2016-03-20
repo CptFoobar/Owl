@@ -40,10 +40,16 @@
         "description": "Allow Owl to work in Incognito windows",
         "value": true
     }, {
+        "title": "Invert local files",
+        "name": "localFiles",
+        "type": "bool",
+        "description": "Allow Owl to apply theme on local files (beginning with 'file://')",
+        "value": true
+    }, {
         "title": "Configure Website Preference",
         "name": "configSitesPref",
         "type": "control",
-        "label": "Open Preferences"
+        "label": "Open Website Settings"
     }],
     "license": "MIT"
 }
