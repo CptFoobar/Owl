@@ -320,6 +320,9 @@ function togglePanel(state) {
 }
 
 function getStyleForUrl(tabUrl) {
+    /* Check if file is local file */
+    if (tabUrl.indexOf("file://") > -1 && !localFiles)
+        return "no_style";
     /* Check if site is whitelisted */
     for (var j = 0; j < alwaysDisableSites.length; j++)
         if (tabUrl.indexOf(alwaysDisableSites[j]) > -1)
