@@ -4,9 +4,9 @@
         self.port.on("tab_config", function(config) {
             receivedConfig = false;
             $("#toggle_owl").bootstrapToggle(config.mode ? "on" : "off");
-            $('#disable_here').bootstrapToggle(config.alwaysDisable ? "on" : "off");
-            $('#use_classic').bootstrapToggle((config.classic || config.alwaysClassic) ? "on" : "off");
-            $('#always_enable_here').bootstrapToggle(config.alwaysEnable ? "on" : "off");
+            $('#disable_here').bootstrapToggle((config.alwaysDisable ? "on" : "off"));
+            $('#use_classic').bootstrapToggle(((config.classic || config.alwaysClassic) ? "on" : "off"));
+            $('#always_enable_here').bootstrapToggle((config.alwaysEnable ? "on" : "off"));
             if (config.alwaysDisable || config.alwaysClassic || !config.mode)
                 $('#use_classic').bootstrapToggle("disable");
             if (config.alwaysDisable)
@@ -27,7 +27,10 @@
                 var status = (checked ? "enable" : "disable");
                 $('#use_classic').bootstrapToggle(status);
                 $('#disable_here').bootstrapToggle(status);
-                $(".site_options").css("color", checked ? "#333" : "#6E6E6E");
+
+                $("#use_classic_text").css("color", (checked ? "#333" : "#6E6E6E"));
+                $("#disable_here_text").css("color", (checked ? "#333" : "#6E6E6E"));
+                $("#always_enable_text").css("color", (checked ? "#333" : "#6E6E6E"));
             }
         });
 
@@ -46,10 +49,10 @@
                 self.port.emit("disable_website", {
                     value: checked
                 });
-                $('#use_classic').bootstrapToggle((checked ? "disable" : "enable"));
+                $('#use_classic').bootstrapToggle(((checked && !$("#toggle_owl").prop("checked")) ? "disable" : "enable"));
                 $('#always_enable_here').bootstrapToggle((checked ? "disable" : "enable"));
-                $("#use_classic_text").css("color", !checked ? "#333" : "#6E6E6E");
-                $("#always_enable_text").css("color", !checked ? "#333" : "#6E6E6E");
+                $("#use_classic_text").css("color", ((checked && $("#toggle_owl").prop("checked")) ? "#6E6E6E" : "#333"));
+                $("#always_enable_text").css("color", ((checked && $("#toggle_owl").prop("checked")) ? "#6E6E6E" : "#333"));
             }
         });
 
@@ -61,7 +64,7 @@
                     value: checked
                 });
                 $('#disable_here').bootstrapToggle((checked ? "disable" : "enable"));
-                $("#disable_here").css("color", (!checked ? "#333" : "#6E6E6E"));
+                $("#disable_here_text").css("color", (checked ? "#6E6E6E" : "#333"));
             }
         });
 

@@ -296,16 +296,11 @@ function setOwl(oMode) {
                  */
                 detach(style, tabs[i]);
             }
-
+            if (invertPdf && owlMode)
+                attach(pdfInversionStyle, tabs[i]);
+            else
+                detach(pdfInversionStyle, tabs[i]);
         }
-    }
-    setPdfInversionMode((invertPdf && oMode));
-}
-
-function setPdfInversionMode(pdfMode) {
-    for (let i = 0; i < tabs.length; i++) {
-        if (pdfMode) attach(pdfInversionStyle, tabs[i]);
-        else detach(pdfInversionStyle, tabs[i]);
     }
 }
 

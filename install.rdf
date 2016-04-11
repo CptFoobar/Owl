@@ -14,7 +14,7 @@
         <em:icon64URL>resource://owl-comfortable-reading-addon/data/icons/enabled-64.png</em:icon64URL>
         <em:optionsURL>data:text/xml,&lt;placeholder/&gt;</em:optionsURL>
         <em:optionsType>2</em:optionsType>
-        <em:homepageURL>http://sidhant.io/</em:homepageURL>
+        <em:homepageURL>http://owl.sidhant.io/</em:homepageURL>
         <em:multiprocessCompatible>false</em:multiprocessCompatible>
         <em:targetApplication>
             <Description>
