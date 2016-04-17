@@ -16,6 +16,8 @@ const { MenuButton } = require("./data/lib/menu_button/menu-button");
 /* Set styles to be used */
 const classicStyle = Style({ uri: "./css/owlClassic.css" });
 const invertStyle = Style({ uri: "./css/owlInverted.css" });
+const CLASSIC_STYLE = "classicStyle";
+const INVERT_STYLE = "invertStyle";
 const pdfInversionStyle = Style({ uri: "./css/pdfInversion.css" });
 
 /* Add-on URLs */
@@ -27,9 +29,8 @@ const WELCOME_PAGE_URL = data.url("markup/welcome.html");
 // Week in seconds
 const REMINDER_INTERVAL = 1000 * 60 * 60 * 24 * 7;
 
-const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "amazon.in",
-                        "tomshardware.com", "pcpartpicker.com", "ebay.ca",
-                        "ebay.in"];
+const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "tomshardware.com",
+                        "pcpartpicker.com", "ebay.ca", "ebay.in"];
 
 /* Init variables */
 var activateOnStartup = prefSet.prefs.owlOnStartup;
@@ -138,13 +139,13 @@ owlPanel.port.on("disable_website", function(payload) {
             if (index == -1) {
                 alwaysDisableSites.push(host);
                 ss.storage.whiteSites = alwaysDisableSites;
-                detach(tabStyle, tabs.activeTab);
+                detachStyle(tabStyle, tabs.activeTab);
             }
         } else {
             alwaysDisableSites.splice(index, 1);
             ss.storage.whiteSites = alwaysDisableSites;
             if (tabStyle != "no_style")
-                attach(tabStyle, tabs.activeTab);
+                attachStyle(tabStyle, tabs.activeTab);
         }
     }
     refreshOwl();
@@ -159,14 +160,14 @@ owlPanel.port.on("always_enable_website", function(payload) {
             if (index == -1) {
                 alwaysEnableSites.push(host);
                 ss.storage.alwaysEnableSites = alwaysEnableSites;
-                detach(tabStyle, tabs.activeTab);
-                attach(tabStyle, tabs.activeTab);
+                detachStyle(tabStyle, tabs.activeTab);
+                attachStyle(tabStyle, tabs.activeTab);
             }
         } else {
             alwaysEnableSites.splice(index, 1);
             ss.storage.alwaysEnableSites = alwaysEnableSites;
             if (tabStyle != "no_style")
-                detach(tabStyle, tabs.activeTab);
+                detachStyle(tabStyle, tabs.activeTab);
         }
     }
     refreshOwl();
@@ -244,13 +245,13 @@ function manipClassic(index, host, toAdd) {
     if (index == -1 && toAdd) {
         classicSiteList.push(host);
         ss.storage.classicSiteList = classicSiteList;
-        detach(invertStyle, tabs.activeTab);
-        attach(classicStyle, tabs.activeTab);
+        detachStyle(invertStyle, tabs.activeTab);
+        attachStyle(classicStyle, tabs.activeTab);
     } else if (!toAdd) {
         classicSiteList.splice(index, 1);
         ss.storage.classicSiteList = classicSiteList;
-        detach(classicStyle, tabs.activeTab);
-        attach(invertStyle, tabs.activeTab);
+        detachStyle(classicStyle, tabs.activeTab);
+        attachStyle(invertStyle, tabs.activeTab);
     }
 };
 
@@ -280,21 +281,21 @@ function setOwl(oMode) {
             continue;
         } else {
             if (indexInArray(getDomainFromUrl(tabs[i].url), alwaysEnableSites) > -1) {
-                detach(style, tabs[i]);
-                attach(style, tabs[i]);
+                detachStyle(style, tabs[i]);
+                attachStyle(style, tabs[i]);
                 continue;
             }
             if (oMode) {
                 var tabPrivate = privateBrowsing.isPrivate(tabs[i]);
                 if (!tabPrivate || (tabPrivate && allowIncognito))
-                    attach(style, tabs[i]);
+                    attachStyle(style, tabs[i]);
             }
             else {
                 /*
                  * Detach unconditionally, since tabs without style would
                  * remain unaffected
                  */
-                detach(style, tabs[i]);
+                detachStyle(style, tabs[i]);
             }
             if (invertPdf && owlMode)
                 attach(pdfInversionStyle, tabs[i]);
@@ -324,12 +325,12 @@ function getStyleForUrl(tabUrl) {
             return "no_style";
 
     /* Default for all websites is defaultStyle */
-    var tabStyle = defaultStyle;
+    var tabStyle = INVERT_STYLE;
 
     /* Check if user has selected classic theme for given site */
     for (var j = 0; j < classicSiteList.length; j++)
         if (tabUrl.indexOf(classicSiteList[j]) > -1)
-            tabStyle = classicStyle;
+            tabStyle = CLASSIC_STYLE;
 
     return tabStyle;
 }
@@ -357,19 +358,30 @@ function tabListener(tab) {
     tabStyle = getStyleForUrl(tab.url);
     if (tabStyle != "no_style") {
         if (owlMode) {
-            attach(tabStyle, tab);
+            attachStyle(tabStyle, tab);
             if (invertPdf) attach(pdfInversionStyle, tab);
         }
         else {
-            detach(tabStyle, tab);
+            detachStyle(tabStyle, tab);
             detach(pdfInversionStyle, tab);
         }
     }
 }
 
+function attachStyle(styleName, tab) {
+    var styleFile = (styleName === CLASSIC_STYLE ?
+        data.url('js/insertClassic.js') : data.url('js/insertInversion.js'));
+    tab.attach({ contentScriptFile: styleFile });
+}
+
+function detachStyle(styleName, tab) {
+    tab.attach({ contentScriptFile: data.url('js/removeOwlTheme.js') });
+}
+
 function setTabListeners() {
     tabs.on('open', tabListener);
     tabs.on('ready', tabListener);
+    //tabs.on('*', );
 }
 
 function indexInArray(url, urlList) {

@@ -1,0 +1,102 @@
+(function() {
+    var INVERT_STYLE =
+    '* {' +
+    '	transitionbox-shadow: none !important;' +
+    '	text-shadow: none !important;' +
+    '	/*transition: background-color 0.50s ease-in, color 0.1s ease-in !important;*/' +
+    '}' +
+    'html, body {' +
+    '	background: -moz-linear-gradient(top, #1f1f1f, #1f1f1f) #1f1f1f repeat !important;' +
+    '	}' +
+    'html {' +
+    '	background: #1f1f1f !important;' +
+    '	color: #AAAAAA !important;' +
+    '	border-color: #333 !important;' +
+    '	}' +
+    'div {' +
+    '   background: #1f1f1f !important;' +
+    '   color: #B6B6B6 !important;' +
+    '}' +
+    'a {' +
+    '   background-color: #1f1f1f !important;' +
+    '   border-color: #AEAEAE !important;' +
+    '}' +
+    'input, textarea {' +
+    '	-moz-appearance: none !important;' +
+    '   background-color: #1f1f1f !important;' +
+    '   color: #EBEBEB !important;' +
+    '   outline: none !important;' +
+    '   background-image: none;' +'        border: 1px solid #999999 !important;' +
+    '}' +
+    'input [type=button], input[type=submit], button {' +
+    '	cursor: pointer !important;' +
+    '}' +
+    ':-moz-placeholder {' +
+    '   color: #4D6BC4 !important;' +
+    '}' +
+    'b, em, strong {' +
+    '   color: #999 !important;' +
+    '}' +
+    'ul, li, th, td, dl, dd, dt, ol, p, article, section {' +
+    '   background-color: #1f1f1f !important;' +
+    '	color: #AAAAAA !important;' +
+    '}' +
+    'h1, h2, h3, h4, h5, h6 {' +
+    '	background-color: #1f1f1f !important;' +
+    '	color: #B7B7B7 !important;' +
+    '}' +
+    'span, cite {' +
+    '	color: #AAAAAA !important;' +
+    '}' +
+    'a, a * {' +
+    '	color: #4488BB !important;' +
+    '}' +
+    'a:visited, a:visited * {' +
+    '	color: #85D !important;' +
+    '}' +
+    'a:hover, a:hover * {' +
+    '	color: #0AE !important;' +
+    '}' +
+    'a.highlight, a.highlight *, a.active, a.active *,'
+    '.selected, .selected *, [href="#"] {' +
+    '	color: #BBB !important;' +
+    '}' +
+    '*:focus {' +
+    '	color: #FFFFFF !important;' +
+    '}' +
+    '*:active {' +
+    '	color: #FFFFFF !important;' +
+    '}' +
+    '/* Code syntax highlighting */' +
+    'pre {' +
+    '	background-color: #393939 !important;' +
+    '}' +
+    'pre .prettyprint { display: block; background-color: #333 !important;}' +
+    'pre .nocode { background-color: none; color: #000 !important;}' +
+    'pre .str { color: #A5C25C !important;}' +
+    'pre .kwd { color: #CB772F !important; font-weight: bold }' +
+    'pre .com { color: #619647 !important;}' +
+    'pre .typ { color: #6897BB !important;}' +
+    'pre .lit { color: #CAF531 !important;}' +
+    'pre .pun { color: #A9B7C6 !important;}' +
+    'pre .pln { color: #A9B7C6 !important;}' +
+    'pre .tag { color: #f0e68c !important; font-weight: bold}' +
+    'pre .atn { color: #bdb76b !important; font-weight: bold }' +
+    'pre .atv { color: #ffa0a0 !important;}' +
+    'pre .dec { color: #98fb98 !important;}' +
+    'code {' +
+    '	background-color: #393939 !important;' +
+    '}' +
+    'blockquote {' +
+    '	background-color: #404040 !important;' +
+    '	color: #AAAAAA;' +
+    '}';
+    ;
+
+    var owlStyle = document.createElement("style");
+    owlStyle.id = "owl-css";
+    owlStyle.type = "text/css";
+    owlStyle.textContent = INVERT_STYLE;
+    document.head.appendChild(owlStyle)
+
+}());
