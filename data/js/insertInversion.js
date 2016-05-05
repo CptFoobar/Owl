@@ -46,6 +46,9 @@
     owlStyle.id = "owl-css";
     owlStyle.type = "text/css";
     owlStyle.textContent = INVERT_STYLE;
-    document.head.appendChild(owlStyle)
-
+    if (document.head) {
+        document.head.appendChild(owlStyle);
+    } else {
+        document.querySelector('head').appendChild(owlStyle);
+    }
 }());

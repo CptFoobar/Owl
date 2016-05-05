@@ -32,6 +32,8 @@ const REMINDER_INTERVAL = 1000 * 60 * 60 * 24 * 7;
 const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "tomshardware.com",
                         "pcpartpicker.com", "ebay.ca", "ebay.in"];
 
+const DEFAULT_DISABLED_SITES = ["resource://blink", "resource://owl"]
+
 /* Init variables */
 var activateOnStartup = prefSet.prefs.owlOnStartup;
 var alwaysClassic = prefSet.prefs.alwaysClassic;
@@ -92,10 +94,11 @@ var classicHotkey = Hotkey({
             var host = getDomainFromUrl(tabs.activeTab.url);
             if (host.length > 0) {
                 var index = indexInArray(host, classicSiteList);
-                manipClassic(index, host);
-                refreshOwl();
-                updatePanelConfig();
+                if (index === -1) manipClassic(index, host, true);
+                else manipClassic(index, host, false);
             }
+            refreshOwl();
+            updatePanelConfig();
         }
   }
 });
@@ -242,7 +245,7 @@ var configMod = pageMod.PageMod({
 });
 
 function manipClassic(index, host, toAdd) {
-    if (index == -1 && toAdd) {
+    if (index === -1 && toAdd) {
         classicSiteList.push(host);
         ss.storage.classicSiteList = classicSiteList;
         detachStyle(invertStyle, tabs.activeTab);
@@ -319,6 +322,12 @@ function getStyleForUrl(tabUrl) {
     /* Check if file is local file */
     if (tabUrl.indexOf("file://") > -1 && !localFiles)
         return "no_style";
+
+    /* Check if file is in default whitelist */
+    for (car j = 0; j < DEFAULT_DISABLED_SITES.length; j++)
+        if (tabUrl.indexOf(DEFAULT_DISABLED_SITES[j]) > -1)
+            return "no_style";
+
     /* Check if site is whitelisted */
     for (var j = 0; j < alwaysDisableSites.length; j++)
         if (tabUrl.indexOf(alwaysDisableSites[j]) > -1)

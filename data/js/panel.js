@@ -1,19 +1,37 @@
 (function() {
     $(function() {
+        // Use this flag as a lock while updating panel config, since 
+        // bootstrap-toggle switches misfire when updating
         var receivedConfig = false;
         self.port.on("tab_config", function(config) {
             receivedConfig = false;
-            $("#toggle_owl").bootstrapToggle(config.mode ? "on" : "off");
-            $('#disable_here').bootstrapToggle((config.alwaysDisable ? "on" : "off"));
-            $('#use_classic').bootstrapToggle(((config.classic || config.alwaysClassic) ? "on" : "off"));
-            $('#always_enable_here').bootstrapToggle((config.alwaysEnable ? "on" : "off"));
-            if (config.alwaysDisable || config.alwaysClassic || !config.mode)
-                $('#use_classic').bootstrapToggle("disable");
-            if (config.alwaysDisable)
-                $('#always_enable_here').bootstrapToggle("disable");
-            if (config.alwaysEnable || !config.mode)
-                $('#disable_here-demo').bootstrapToggle("disable");
-            $(".site_options").css("color", config.mode ? "#333" : "#6E6E6E");
+
+            $("#toggle_owl").bootstrapToggle((config.mode ? "on" : "off"));
+            $("#disable_here").bootstrapToggle((config.alwaysDisable ? "on" : "off"));
+            $("#use_classic").bootstrapToggle(((config.classic || config.alwaysClassic) ? "on" : "off"));
+            $("#always_enable_here").bootstrapToggle((config.alwaysEnable ? "on" : "off"));
+            
+            if (config.alwaysDisable || config.alwaysClassic || !config.mode) {
+                $("#use_classic").bootstrapToggle("disable");
+                $("#use_classic_text").css("color", "#6E6E6E");
+            } else {
+                $("#use_classic").bootstrapToggle("enable");
+                $("#use_classic_text").css("color", "#333");
+            }
+            if (config.alwaysEnable || !config.mode) {
+                $("#disable_here").bootstrapToggle("disable");
+                $("#disable_here_text").css("color", "#6E6E6E");
+            } else {
+                $("#disable_here").bootstrapToggle("enable");
+                $("#disable_here_text").css("color", "#333");
+            }
+            if (config.alwaysDisable) {
+                $("#always_enable_here").bootstrapToggle("disable");
+                $("#always_enable_text").css("color", "#6E6E6E");
+            } else {
+                $("#always_enable_here").bootstrapToggle("enable");
+                $("#always_enable_text").css("color", "#333");
+            }
             receivedConfig = true;
         });
 
