@@ -324,7 +324,7 @@ function getStyleForUrl(tabUrl) {
         return "no_style";
 
     /* Check if file is in default whitelist */
-    for (car j = 0; j < DEFAULT_DISABLED_SITES.length; j++)
+    for (var j = 0; j < DEFAULT_DISABLED_SITES.length; j++)
         if (tabUrl.indexOf(DEFAULT_DISABLED_SITES[j]) > -1)
             return "no_style";
 
