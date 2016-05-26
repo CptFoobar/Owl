@@ -42,12 +42,15 @@ var owlMode = activateOnStartup;
 var allowIncognito = prefSet.prefs.allowIncognito;
 var defaultStyle = alwaysClassic ? classicStyle : invertStyle;
 var localFiles = prefSet.prefs.localFiles;
-
+var classicHotkeyShortcut = prefSet.prefs.classicHotkeyCharacter;
+var owlHotkeyShortcut = prefSet.prefs.owlHotkeyCharacter;
 /* Site configuration lists */
 var alwaysDisableSites = ss.storage.whiteSites || [];
 var alwaysEnableSites = ss.storage.alwaysEnableSites || [];
 // Set techcrunch.com as default classic
 var classicSiteList = ss.storage.classicSiteList || DEFAULT_CLASSICS;
+var owlHotkey = null;
+var classicHotkey = null;
 
 /* Owl Toggle Button */
 var owlButton = MenuButton({
@@ -75,33 +78,6 @@ function iconSet(condition) {
         "64": data.url("icons/" + (condition ? "enabled" : "disabled") + "-64.png")
     };
 }
-
-/* Owl Hotkeys: Shift-Alt-D to toggle Owl, Shift-Alt-C to switch theme */
-var owlHotKey = Hotkey({
-    combo: "alt-shift-d",
-    onPress: function() {
-        owlMode = !owlMode;
-        setOwl(owlMode);
-        updatePanelConfig();
-  }
-});
-
-/* Hotkey for Classic Mode */
-var classicHotkey = Hotkey({
-    combo: "alt-shift-c",
-    onPress: function() {
-        if (owlMode) {
-            var host = getDomainFromUrl(tabs.activeTab.url);
-            if (host.length > 0) {
-                var index = indexInArray(host, classicSiteList);
-                if (index === -1) manipClassic(index, host, true);
-                else manipClassic(index, host, false);
-            }
-            refreshOwl();
-            updatePanelConfig();
-        }
-  }
-});
 
 /* Owl popup panel */
 var owlPanel = panel.Panel({
@@ -209,6 +185,8 @@ prefSet.on("localFiles", onLocalFilesChange);
 prefSet.on("configSitesPref", function() {
     tabs.open(CONFIG_PAGE_URL);
 });
+prefSet.on("classicHotkeyCharacter", onClassicHotkeyChange);
+prefSet.on("owlHotkeyCharacter", onOwlHotkeyChange);
 
 /* Set pagemod for configuration site */
 var configMod = pageMod.PageMod({
@@ -393,6 +371,35 @@ function setTabListeners() {
     //tabs.on('*', );
 }
 
+function setHotkeys() {
+    /* Owl Hotkeys: Shift-Alt-D to toggle Owl, Shift-Alt-C to switch theme */
+    owlHotkey = Hotkey({
+        combo: "alt-shift-" + String.fromCharCode(97 + owlHotkeyShortcut),
+        onPress: function() {
+            owlMode = !owlMode;
+            setOwl(owlMode);
+            updatePanelConfig();
+      }
+    });
+
+    /* Hotkey for Classic Mode */
+    classicHotkey = Hotkey({
+        combo: "alt-shift-" + String.fromCharCode(97 + classicHotkeyShortcut),
+        onPress: function() {
+            if (owlMode) {
+                var host = getDomainFromUrl(tabs.activeTab.url);
+                if (host.length > 0) {
+                    var index = indexInArray(host, classicSiteList);
+                    if (index === -1) manipClassic(index, host, true);
+                    else manipClassic(index, host, false);
+                }
+                refreshOwl();
+                updatePanelConfig();
+            }
+      }
+    });
+}
+
 function indexInArray(url, urlList) {
     for (var i = 0; i < urlList.length; i++)
         if (urlList[i] === url)
@@ -433,6 +440,28 @@ function onLocalFilesChange(prefName) {
     }
 }
 
+function onClassicHotkeyChange(prefName) {
+    if(prefName === "classicHotkeyCharacter") {
+        if (prefSet.prefs.classicHotkeyCharacter === owlHotkeyShortcut) {
+            prefSet.prefs.classicHotkeyCharacter = classicHotkeyShortcut;
+        } else {
+            classicHotkeyShortcut = prefSet.prefs.classicHotkeyCharacter;
+        }
+        setHotkeys();
+    }
+}
+
+function onOwlHotkeyChange(prefName) {
+    if(prefName === "owlHotkeyCharacter") {
+        if (prefSet.prefs.owlHotkeyCharacter === classicHotkeyShortcut) {
+            prefSet.prefs.owlHotkeyCharacter = owlHotkeyShortcut;
+        } else {
+            owlHotkeyShortcut = prefSet.prefs.owlHotkeyCharacter;
+        }
+        setHotkeys();
+    }
+}
+
 function refreshOwl() {
     setOwl(false);
     setOwl(owlMode);
@@ -445,6 +474,7 @@ function owlInit() {
         setOwl(owlMode);
     }
     setTabListeners();
+    setHotkeys();
     setTimeout(showSupportPanel, 5000);
 }
 

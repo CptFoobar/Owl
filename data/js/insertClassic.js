@@ -1,5 +1,5 @@
 (function() {
-    var INVERT_STYLE =
+    var CLASSIC_STYLE = '' +
     '* {' +
     '	transitionbox-shadow: none !important;' +
     '	text-shadow: none !important;' +
@@ -26,7 +26,8 @@
     '   background-color: #1f1f1f !important;' +
     '   color: #EBEBEB !important;' +
     '   outline: none !important;' +
-    '   background-image: none;' +'        border: 1px solid #999999 !important;' +
+    '   background-image: none;' +
+    '   border: 1px solid #999999 !important;' +
     '}' +
     'input [type=button], input[type=submit], button {' +
     '	cursor: pointer !important;' +
@@ -57,7 +58,7 @@
     'a:hover, a:hover * {' +
     '	color: #0AE !important;' +
     '}' +
-    'a.highlight, a.highlight *, a.active, a.active *,'
+    'a.highlight, a.highlight *, a.active, a.active *,' +
     '.selected, .selected *, [href="#"] {' +
     '	color: #BBB !important;' +
     '}' +
@@ -91,13 +92,15 @@
     '	background-color: #404040 !important;' +
     '	color: #AAAAAA;' +
     '}';
-    ;
 
     var owlStyle = document.createElement("style");
     owlStyle.id = "owl-css";
     owlStyle.type = "text/css";
-    owlStyle.textContent = INVERT_STYLE;
-   if (document.head) {
+    owlStyle.textContent = CLASSIC_STYLE;
+    if (document.head) {
         document.head.appendChild(owlStyle);
+    } else {
+        var head = document.querySelector('head');
+        if (head) head.appendChild(owlStyle);
     }
 }());

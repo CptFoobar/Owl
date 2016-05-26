@@ -1,5 +1,5 @@
 (function() {
-    var INVERT_STYLE ='' +
+    var INVERT_STYLE = '' +
     '@media screen {' +
     '  html {' +
     '      filter: invert(95%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;' +
@@ -49,6 +49,7 @@
     if (document.head) {
         document.head.appendChild(owlStyle);
     } else {
-        document.querySelector('head').appendChild(owlStyle);
+        var head = document.querySelector('head');
+        if (head) head.appendChild(owlStyle);
     }
 }());
