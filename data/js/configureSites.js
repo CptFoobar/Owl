@@ -53,7 +53,7 @@
         if ($("#always_enable_sites").children().length === 0)
             $("#always_enable_sites").append(
                     '<li class="list-group-item text-center no_sites">' +
-                        'No sites are set to use Classic Theme.' +
+                        'No sites are always enabled.' +
                     '</li>');
     }
 
