@@ -4,3 +4,6 @@
 # Ignore any zip or xpi files
 *.zip
 *.xpi
+
+# Ignore changelog file
+changes.txt

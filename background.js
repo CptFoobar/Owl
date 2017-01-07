@@ -4,13 +4,15 @@ const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "tomshardware.com",
 
 const INVERT_STYLE_FILE = "data/css/owlInverted.css";
 const CLASSIC_STYLE_FILE = "data/css/owlClassic.css";
+const CMD_TOGGLE_OWL = "toggle-owl";
+const CMD_TOGGLE_CLASSIC = "toggle-classic";
 
 
 var owlMode = false;
 var owlButton = browser.browserAction;
+var owlPageAction = browser.pageAction;
 
 owlButton.onClicked.addListener((tab) => {
-    console.log("toggleing");
     owlMode = !owlMode;
     setOwl(owlMode);
 });
@@ -18,6 +20,7 @@ owlButton.onClicked.addListener((tab) => {
 // Add listener to add/remove Owl CSS on new tabs
 browser.tabs.onCreated.addListener(tabOpenListener);
 browser.tabs.onUpdated.addListener(tabOpenListener);
+browser.commands.onCommand.addListener(commandHandler);
 
 /* returns JSON with paths to icon according to condition. */
 function iconSet(condition) {
@@ -30,9 +33,8 @@ function iconSet(condition) {
     };
 }
 
-
 function setOwl(oMode) {
-    console.log("setting: " + oMode);
+    console.log(`Setting Owl: ${oMode}`);
     // Set icon and button label
     owlButton.setIcon({"path": iconSet(oMode)});
     owlButton.setTitle({"title" : "Owl is " + (oMode ? "enabled" : "disabled") });
@@ -56,7 +58,7 @@ function setOwlOnTabs(tabs, oMode) {
         cssOperation.then(null, logError);
         // Show/hide pageAction
         if (!tab.url.match(/^about:/)) {
-            browser.pageAction.show(tab.id);
+            owlPageAction.show(tab.id);
         }
     }
 }
@@ -93,6 +95,13 @@ function getStyleFileForUrl(tabUrl) {
     //         tabStyle = CLASSIC_STYLE_FILE;
 
     return tabStyle;
+}
+
+function commandHandler(command) {
+    if (command == CMD_TOGGLE_OWL) {
+        owlMode = !owlMode;
+        setOwl(owlMode);
+    }
 }
 
 function logError(error) {

@@ -1,0 +1,38 @@
+html, body {
+    background-color: #fbfbfb;
+}
+
+#optionsTable {
+    font-size: 1.23em;
+    background-color: #fbfbfb;
+}
+
+#optionsTable td small {
+    color: #4f4f4f;
+}
+
+#optionsTable td select {
+    min-width: 6em;
+    width: 6em;
+}
+
+input[type="checkbox"] {
+    -moz-transform: scale(1.35);
+    vertical-align: -moz-middle-with-baseline;
+}
+
+input[type="checkbox"]:focus,
+input[type="checkbox"]:active {
+    outline: none;
+}
+
+#openSiteConfig {
+    background-color: #fbfbfb;
+    border: 1px solid #c1c1c1;
+}
+
+#openSiteConfig:hover,
+#openSiteConfig:focus,
+#openSiteConfig:active {
+    background-color: #ebebeb;
+}
