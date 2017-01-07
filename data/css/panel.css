@@ -1,3 +1,8 @@
+html, body {
+    width: 250px;
+    height: 475px;
+}
+
 .toggle.owl,
 .toggle-on.owl,
 .toggle-off.owl {
