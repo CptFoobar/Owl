@@ -14,7 +14,8 @@
         "<all_urls>",
         "storage",
         "activeTab",
-        "tabs"
+        "tabs",
+        "runtime"
     ],
     "browser_action": {
         "browser_style": false,

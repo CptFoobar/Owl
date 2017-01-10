@@ -7,8 +7,45 @@ const CLASSIC_STYLE_FILE = "data/css/owlClassic.css";
 const CMD_TOGGLE_OWL = "toggle-owl";
 const CMD_TOGGLE_CLASSIC = "toggle-classic";
 
-
 var owlMode = false;
+var activateOnStartup = false;
+var alwaysClassic = false;
+var invertPdf = true;
+var owlMode = activateOnStartup;
+var allowIncognito = true;
+var defaultStyle = alwaysClassic ? CLASSIC_STYLE_FILE : INVERT_STYLE_FILE;
+var localFiles = false;
+var classicHotkeyShortcut = 'C';
+var owlHotkeyShortcut = 'D';
+/* Site configuration lists */
+// var alwaysDisableSites = ss.storage.whiteSites || [];
+// var alwaysEnableSites = ss.storage.alwaysEnableSites || [];
+// Set techcrunch.com as default classic
+// var classicSiteList = ss.storage.classicSiteList || DEFAULT_CLASSICS;
+
+browser.storage.local.get().then((settings) => {
+    // reset storage if nothing is stored so far
+    if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
+        resetStorage();
+    } else {
+        owlMode = settings.owlOnStartup;
+        activateOnStartup = settings.owlOnStartup;
+        alwaysClassic = settings.alwaysClassic;
+        invertPdf = settings.invertPdf;
+        owlMode = activateOnStartup;
+        allowIncognito = settings.allowIncognito;
+        defaultStyle = alwaysClassic ? CLASSIC_STYLE_FILE : INVERT_STYLE_FILE;
+        localFiles = settings.localFiles;
+        classicHotkeyShortcut = settings.classicHotkeyCharacter;
+        owlHotkeyShortcut = settings.owlHotkeyCharacter;
+        /* Site configuration lists */
+        // alwaysDisableSites = ss.storage.whiteSites || [];
+        // alwaysEnableSites = ss.storage.alwaysEnableSites || [];
+        // Set default classic
+        // classicSiteList = ss.storage.classicSiteList || DEFAULT_CLASSICS;
+    }
+}, logError);
+
 var owlButton = browser.browserAction;
 var owlPageAction = browser.pageAction;
 
@@ -36,11 +73,13 @@ function iconSet(condition) {
 function setOwl(oMode) {
     console.log(`Setting Owl: ${oMode}`);
     // Set icon and button label
-    owlButton.setIcon({"path": iconSet(oMode)});
-    owlButton.setTitle({"title" : "Owl is " + (oMode ? "enabled" : "disabled") });
+    owlButton.setIcon({ "path": iconSet(oMode) });
+    owlButton.setTitle({ "title": "Owl is " + (oMode ? "enabled" : "disabled") });
     // Apply/Remove Owl CSS and show/hide pageAction to all current tabs
     var allTabs = browser.tabs.query({});
-    allTabs.then((tabs) => { setOwlOnTabs(tabs, oMode); }, logError);
+    allTabs.then((tabs) => { setOwlOnTabs(tabs, oMode) }, logError);
+
+    console.log(browser.runtime.id);
 }
 
 function setOwlOnTabs(tabs, oMode) {
@@ -70,9 +109,7 @@ function tabOpenListener(tab) {
         // When  tab isn't done loading, we only get it's id and not the tab
         // object. Query for that tab and set Owl when it's ready
         var gettingTab = browser.tabs.get(tab);
-        gettingTab.then((tab) => {
-            setOwlOnTabs([tab], owlMode);
-        }, logError);
+        gettingTab.then((tab) => { setOwlOnTabs([tab], owlMode) }, logError);
     }
 }
 
@@ -104,6 +141,18 @@ function commandHandler(command) {
     }
 }
 
+function resetStorage() {
+    browser.storage.local.set({
+        owlOnStartup: false,
+        alwaysClassic: false,
+        invertPdf: true,
+        invertLocalFiles: false,
+        allowIncognito: true,
+        owlHotkeyCharacter: 'D',
+        classicHotkeyCharacter: 'C'
+    });
+}
+
 function logError(error) {
-  console.log(`Error: ${error}`);
+    console.log(`Error: ${error}`);
 }
