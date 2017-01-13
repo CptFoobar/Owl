@@ -31,7 +31,7 @@ Code snippet with syntax highlighting in Owl:
 <br />
 Owl Panel to control the add-on's behaviour:
 
-![Owl Panel](https://addons.cdn.mozilla.net/user-media/previews/full/170/170561.png?modified=1453758412)
+![Owl Panel](https://addons.cdn.mozilla.net/user-media/previews/full/174/174583.png?modified=1464274554)
 
 ## Install
 To install this add-on in Firefox (version 38.0 and above), just follow [this](https://addons.mozilla.org/en-US/firefox/addon/owl/) link and install.
@@ -40,11 +40,10 @@ To install this add-on in Firefox (version 38.0 and above), just follow [this](h
 Happy Reading!
 
 ## Contribute
-Current version (v1.1.2) has the basic functionality. Upcoming features are:
-- Control background color and font color and size
-- Exceptions for websites
-- Fixing issues on various sites (see [here](https://addons.mozilla.org/en-US/firefox/addon/owl/reviews/722756/) for more)
-
+Current version (v1.3.2) has the most of the functionality I intended to have for this add-on. A few upcoming features would be:
+- Export / Import settings
+- Sync across Firefox profiles (once the WebExtensions API supports it, which should be soon)
+Currently, the add-on is being port from the lagacy Add-on SDK to the newer WebExtensions API. The development branch is `v2` in case you wish to help with the port.
 To contribute, you can:
 - [Review on AMO](https://addons.mozilla.org/en-US/firefox/users/login?to=/en-US/firefox/addon/owl/reviews/add)
 - [Suggest new features](https://github.com/TigerKid001/Owl/issues)
