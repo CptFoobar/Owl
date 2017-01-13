@@ -14,8 +14,7 @@
         "<all_urls>",
         "storage",
         "activeTab",
-        "tabs",
-        "runtime"
+        "tabs"
     ],
     "browser_action": {
         "browser_style": false,
@@ -36,7 +35,8 @@
             "64": "data/icons/enabled-64.png"
         },
         "default_title": "Open Owl Panel",
-        "default_popup": "data/markup/panel.html"
+        "default_popup": "data/markup/panel.html",
+        "browser_style": false
     },
     "options_ui": {
         "page": "data/markup/owl_preferences.html",
@@ -56,7 +56,6 @@
             "description": "Use classic theme on current page"
         }
     },
-
     "developer": {
         "name": "Sidhant Sharma [:tk]",
         "url": "http://sidhant.io"

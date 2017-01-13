@@ -1,46 +1,55 @@
-$(function() {
-    let STORAGE = browser.storage.local;
-    const DEFAULT_CONFIG = {
-        owlOnStartup: false,
-        alwaysClassic: false,
-        invertPdf: true,
-        invertLocalFiles: false,
-        allowIncognito: true,
-        owlHotkeyCharacter: 'D',
-        classicHotkeyCharacter: 'C'
+(function() {
+    $(function() {
+        let STORAGE = browser.storage.local;
+        const DEFAULT_CONFIG = {
+            owlOnStartup: false,
+            alwaysClassic: false,
+            invertPdf: true,
+            invertLocalFiles: false,
+            allowIncognito: true,
+            owlHotkeyCharacter: 'D',
+            classicHotkeyCharacter: 'C'
+        };
 
-    };
+        STORAGE.get().then(updateUIConfig, setDefaultConfig);
+        var sendConfigBroadcast = false;
 
-    STORAGE.get().then(updateUIConfig, setDefaultConfig);
-
-    function updateUIConfig(userData) {
-        for (let checkboxId of ["owlOnStartup", "alwaysClassic", "invertPdf", "invertLocalFiles", "allowIncognito"]) {
-            $("#" + checkboxId).prop('checked', userData[checkboxId]);
+        function updateUIConfig(userData) {
+            sendConfigBroadcast = false;
+            for (let checkboxId of ["owlOnStartup", "alwaysClassic", "invertPdf", "invertLocalFiles", "allowIncognito"]) {
+                $("#" + checkboxId).prop('checked', userData[checkboxId]);
+            }
+            $("#owlHotkeyCharacter").val(userData.owlHotkeyCharacter);
+            $("#classicHotkeyCharacter").val(userData.classicHotkeyCharacter);
+            sendConfigBroadcast = true;
         }
-        $("#owlHotkeyCharacter").val(userData.owlHotkeyCharacter);
-        $("#classicHotkeyCharacter").val(userData.classicHotkeyCharacter);
-    }
 
-    function setDefaultConfig() {
-        for (let checkboxId of ["owlOnStartup", "alwaysClassic", "invertPdf", "invertLocalFiles", "allowIncognito"]) {
-            $("#" + checkboxId).prop('checked', DEFAULT_CONFIG[checkboxId]);
+        function setDefaultConfig() {
+            sendConfigBroadcast = false;
+            for (let checkboxId of ["owlOnStartup", "alwaysClassic", "invertPdf", "invertLocalFiles", "allowIncognito"]) {
+                $("#" + checkboxId).prop('checked', DEFAULT_CONFIG[checkboxId]);
+            }
+            $("#owlHotkeyCharacter").val(DEFAULT_CONFIG.owlHotkeyCharacter);
+            $("#classicHotkeyCharacter").val(DEFAULT_CONFIG.classicHotkeyCharacter);
+            sendConfigBroadcast = true;
         }
-        $("#owlHotkeyCharacter").val(DEFAULT_CONFIG.owlHotkeyCharacter);
-        $("#classicHotkeyCharacter").val(DEFAULT_CONFIG.classicHotkeyCharacter);
-    }
 
-    $("input[type='checkbox']").change(function() {
-        var id = $(this).attr("id");
-        STORAGE.set({[id]: $(this).is(":checked")}).then(null, (e) => { console.log(e); });
+        $("input[type='checkbox']").change(function() {
+            var id = $(this).attr("id");
+            STORAGE.set({[id]: $(this).is(":checked")}).then(() => {
+                browser.runtime.sendMessage({
+                    intent: "prefUpdate",
+                    prefName: id,
+                    prefValue: $(this).is(":checked")
+                });
+            }, (e) => { console.log(e); });
+        });
+
+        $("#openSiteConfig").click(function() {
+            browser.tabs.create({
+                url: "configure_sites.html"
+            });
+        });
+
     });
-
-    $("select").change(function() {
-        var id = $(this).attr("id");
-        STORAGE.set({[id]: $(this).val()}).then(null, (e) => { console.log(e); });
-    });
-
-    $("#openSiteConfig").click(function() {
-        window.open("configure_sites.html", "_blank");
-    });
-
-});
+}());
