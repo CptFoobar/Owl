@@ -54,6 +54,12 @@
                 "default": "Alt+Shift+C"
             },
             "description": "Use classic theme on current page"
+        },
+        "toggle-current-site": {
+            "suggested_key": {
+                "default": "Alt+Shift+X"
+            },
+            "description": "Enable/Disable Owl on current website"
         }
     },
     "developer": {

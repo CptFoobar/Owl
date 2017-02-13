@@ -27,7 +27,7 @@ html, body {
 
 
 .owl_logo {
-    background: rgba(0, 0, 0, 0.25) url("../icons/Owl-Logo.png") no-repeat scroll 50% 50%;
+    background: rgba(0, 0, 0, 0.25) url("../icons/owl_logo.png") no-repeat scroll 50% 50%;
     background-size: cover;
     min-height: 90px;
 }

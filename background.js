@@ -4,8 +4,11 @@ const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "tomshardware.com",
 
 const INVERT_STYLE_FILE = "data/css/owlInverted.css";
 const CLASSIC_STYLE_FILE = "data/css/owlClassic.css";
+const PDF_INVERT_STYLE_FILE = "data/css/pdfInversion.css";
 const CMD_TOGGLE_OWL = "toggle-owl";
 const CMD_TOGGLE_CLASSIC = "toggle-classic";
+const CMD_TOGGLE_CURRENT_SITE = "toggle-current-site";
+const NO_STYLE = "no_style";
 
 var owlMode = false;
 var activateOnStartup = false;
@@ -15,8 +18,6 @@ var owlMode = activateOnStartup;
 var allowIncognito = true;
 var defaultStyleFile = alwaysClassic ? CLASSIC_STYLE_FILE : INVERT_STYLE_FILE;
 var localFiles = false;
-var classicHotkeyShortcut = 'C';
-var owlHotkeyShortcut = 'D';
 /* Site configuration lists */
 var alwaysDisableSites = [];
 var alwaysEnableSites = [];
@@ -37,8 +38,6 @@ browser.storage.local.get().then((settings) => {
         allowIncognito = settings.allowIncognito;
         defaultStyleFile = alwaysClassic ? CLASSIC_STYLE_FILE : INVERT_STYLE_FILE;
         localFiles = settings.localFiles;
-        classicHotkeyShortcut = settings.classicHotkeyCharacter;
-        owlHotkeyShortcut = settings.owlHotkeyCharacter;
         /* Site configuration lists */
         alwaysDisableSites = settings.whiteSites;
         alwaysEnableSites = settings.alwaysEnableSites;
@@ -95,7 +94,7 @@ function setOwlOnTabs(tabs, oMode) {
             continue;
         }
         var fileUrl = getStyleFileForUrl(getDomainFromUrl(tab.url));
-        if (fileUrl == "no_style") {
+        if (fileUrl == NO_STYLE) {
             continue;
         }
         var cssOperation = null;
@@ -106,8 +105,12 @@ function setOwlOnTabs(tabs, oMode) {
             cssOperation = browser.tabs.insertCSS(tab.id, makeCssConfig(fileUrl));
         } else {
             cssOperation = browser.tabs.removeCSS(tab.id, makeCssConfig(fileUrl));
+            browser.tabs.removeCSS(tab.id, makeCssConfig(PDF_INVERT_STYLE_FILE));
         }
-        cssOperation.then(null, logError);
+        cssOperation.then(() => {
+            if (invertPdf && oMode)
+                browser.tabs.insertCSS(tab.id, makeCssConfig(PDF_INVERT_STYLE_FILE));
+        }, logError);
         // Show/hide pageAction
         if (!tab.url.match(/^about:/)) {
             owlPageAction.show(tab.id);
@@ -170,7 +173,7 @@ function handlePanelMessage(message, tab) {
                         browser.storage.local.set({
                             whiteSites: alwaysDisableSites
                         });
-                        if (tabStyle != "no_style")
+                        if (tabStyle != NO_STYLE)
                             browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                     }
                 } else {
@@ -178,7 +181,7 @@ function handlePanelMessage(message, tab) {
                     browser.storage.local.set({
                         whiteSites: alwaysDisableSites
                     });
-                    if (tabStyle != "no_style")
+                    if (tabStyle != NO_STYLE)
                         browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                 }
                 debugLog("alwaysDisabled", alwaysDisableSites);
@@ -196,7 +199,7 @@ function handlePanelMessage(message, tab) {
                         browser.storage.local.set({
                             alwaysEnableSites: alwaysEnableSites
                         });
-                        if (tabStyle != "no_style") {
+                        if (tabStyle != NO_STYLE) {
                             browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(() => {
                                 browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                             }, null);
@@ -207,7 +210,7 @@ function handlePanelMessage(message, tab) {
                     browser.storage.local.set({
                         alwaysEnableSites: alwaysEnableSites
                     });
-                    if (tabStyle != "no_style")
+                    if (tabStyle != NO_STYLE)
                         browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                 }
                 debugLog("alwaysEnableWebsite", alwaysEnableSites);
@@ -262,11 +265,11 @@ function handlePanelMessage(message, tab) {
 function getStyleFileForUrl(tabUrl) {
     /* Check if file is local file */
     if (tabUrl.indexOf("file://") > -1 && !localFiles)
-        return "no_style";
+        return NO_STYLE;
 
     /* Check if site is whitelisted */
     if (indexInArray(tabUrl, alwaysDisableSites) > -1)
-            return "no_style";
+            return NO_STYLE;
 
     /* Default for all websites is defaultStyleFile */
     var tabStyle = defaultStyleFile;
@@ -340,9 +343,58 @@ function makeCssConfig(file_url) {
 }
 
 function commandHandler(command) {
-    if (command == CMD_TOGGLE_OWL) {
-        owlMode = !owlMode;
-        setOwl(owlMode);
+    switch (command) {
+        case CMD_TOGGLE_OWL: {
+            owlMode = !owlMode;
+            setOwl(owlMode);
+            break;
+        }
+        case CMD_TOGGLE_CLASSIC: {
+            if (owlMode) {
+                var querying = browser.tabs.query({currentWindow: true, active: true});
+                querying.then((tabs) => {
+                    var host = getDomainFromUrl(tabs[0].url);
+                    if (host.length > 0 && getStyleFileForUrl(host) != NO_STYLE) {
+                        var index = indexInArray(host, classicSiteList);
+                        if (index === -1) manipClassic(index, host, true);
+                        else manipClassic(index, host, false);
+                    }
+                    refreshOwl();
+                    updatePanelConfig();
+                }, null);
+            break;
+            }
+        }
+        case CMD_TOGGLE_CURRENT_SITE: {
+            var querying = browser.tabs.query({currentWindow: true, active: true});
+            querying.then((tabs) => {
+                var tabId = tabs[0].id;
+                var tabUrl = getDomainFromUrl(tabs[0].url);
+                var tabStyle = getStyleFileForUrl(tabUrl);
+                if (tabUrl.length > 0) {
+                    var index = indexInArray(tabUrl, alwaysDisableSites);
+
+                    if (index == -1) {
+                        alwaysDisableSites.push(tabUrl);
+                        browser.storage.local.set({
+                            whiteSites: alwaysDisableSites
+                        });
+                        if (tabStyle != NO_STYLE)
+                            browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
+                    } else {
+                        alwaysDisableSites.splice(index, 1);
+                        browser.storage.local.set({
+                            whiteSites: alwaysDisableSites
+                        });
+                        if (tabStyle != NO_STYLE)
+                            browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
+                    }
+                    debugLog("alwaysDisabled", alwaysDisableSites);
+                }
+                refreshOwl();
+            }, logError);
+            break;
+        }
     }
 }
 
@@ -353,8 +405,6 @@ function resetStorage() {
         invertPdf: true,
         invertLocalFiles: false,
         allowIncognito: true,
-        owlHotkeyCharacter: 'D',
-        classicHotkeyCharacter: 'C',
         whiteSites: [],
         alwaysEnableSites: [],
         classicSiteList: DEFAULT_CLASSICS

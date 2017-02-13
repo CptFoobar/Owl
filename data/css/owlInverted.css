@@ -1,12 +1,23 @@
 @namespace html url(http://www.w3.org/1999/xhtml);
 
-@-moz-document regexp("^(https?|ftps?|file|about):(?!((.*).pdf)).*$") {
+@-moz-document regexp("^(https?|ftps?|file):(?!((.*).pdf)).*$") {
     html {
         filter: invert(95%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
         overflow: auto;
     }
-    img, iframe, video, *:not(object):not(body)>embed, object, *[style*="background:url"]:empty, *[style*="background-image:url"]:empty, *[style*="background: url"]:empty, *[style*="background-image: url"]:empty {
+    img,
+    iframe,
+    *:not(object):not(body)>embed:not(video),
+    object,
+    *[style*="background:url"]:empty,
+    *[style*="background-image:url"]:empty,
+    *[style*="background: url"]:empty,
+    *[style*="background-image: url"]:empty {
         filter: brightness(95%) invert(105%) hue-rotate(180deg) !important;
+    }
+
+    video {
+        filter: brightness(95%) invert(105%) hue-rotate(180deg) contrast(111%) !important;
     }
 
     .irc_bg {
