@@ -17,7 +17,7 @@
 	],
 	"applications": {
 		"gecko": {
-			"id": "owl@sidhant.io",
+			"id": "@owl-comfortable-reading-addon",
 			"strict_min_version": "46.0"
 		}
 	},
