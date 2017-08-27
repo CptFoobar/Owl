@@ -31,7 +31,7 @@ Code snippet with syntax highlighting in Owl:
 <br />
 Owl Panel to control the add-on's behaviour:
 
-![Owl Panel](https://addons.cdn.mozilla.net/user-media/previews/full/174/174583.png?modified=1464274554)
+![Owl Panel](https://addons.cdn.mozilla.net/user-media/previews/full/186/186240.png?modified=1500649555)
 
 ## Install
 To install this add-on in Firefox (version 38.0 and above), just follow [this](https://addons.mozilla.org/en-US/firefox/addon/owl/) link and install.
