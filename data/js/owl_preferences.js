@@ -15,6 +15,7 @@
         var sendConfigBroadcast = false;
 
         function updateUIConfig(userData) {
+            //console.log("[OWL] data: ", JSON.stringify(userData));
             sendConfigBroadcast = false;
             for (let checkboxId of ["owlOnStartup", "alwaysClassic", "invertPdf", "invertLocalFiles", "allowIncognito"]) {
                 $("#" + checkboxId).prop('checked', userData[checkboxId]);

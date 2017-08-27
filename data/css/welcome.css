@@ -27,3 +27,17 @@ body {
 .welcome_link:hover, .welcome_link:focus, .welcome_link:active {
     color: rgb(0, 37, 171);
 }
+
+.btn.btn-warning.btn-fab {
+    position: fixed !important;
+    bottom: 5%;
+    right: 3%;
+    z-index: 10000;
+    font-size: 1.1em;
+}
+
+.btn-fab:hover,
+.btn-fab:active,
+.btn-fab:focus {
+    outline: none;
+}

@@ -7,3 +7,6 @@
 
 # Ignore changelog file
 changes.txt
+
+#Ignore artifacts
+web-ext-artifacts

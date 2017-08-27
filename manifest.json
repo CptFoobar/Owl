@@ -1,71 +1,78 @@
 {
-    "name": "Owl - For comfortable reading",
-    "short_name": "Owl",
-    "description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
-    "version": "2.0alpha1",
-    "homepage_url": "http://owl.sidhant.io/",
-
-    "icons": {
-        "48": "data/icons/enabled-48.png",
-        "64": "data/icons/enabled-64.png",
-        "96": "data/icons/enabled-96.png"
-    },
-    "permissions": [
-        "<all_urls>",
-        "storage",
-        "activeTab",
-        "tabs"
-    ],
-    "browser_action": {
-        "browser_style": false,
-        "default_title": "Owl button",
-        "default_icon": {
-            "16": "data/icons/enabled-16.png",
-            "32": "data/icons/enabled-32.png",
-            "64": "data/icons/enabled-64.png"
-        }
-    },
-    "background": {
-        "scripts": ["background.js"]
-    },
-    "page_action": {
-        "default_icon": {
-            "16": "data/icons/enabled-16.png",
-            "32": "data/icons/enabled-32.png",
-            "64": "data/icons/enabled-64.png"
-        },
-        "default_title": "Open Owl Panel",
-        "default_popup": "data/markup/panel.html",
-        "browser_style": false
-    },
-    "options_ui": {
-        "page": "data/markup/owl_preferences.html",
-        "open_in_tab": false
-    },
-    "commands": {
-        "toggle-owl": {
-            "suggested_key": {
-                "default": "Alt+Shift+D"
-            },
-            "description": "Toggle Own ON or OFF"
-        },
-        "toggle-classic": {
-            "suggested_key": {
-                "default": "Alt+Shift+C"
-            },
-            "description": "Use classic theme on current page"
-        },
-        "toggle-current-site": {
-            "suggested_key": {
-                "default": "Alt+Shift+X"
-            },
-            "description": "Enable/Disable Owl on current website"
-        }
-    },
-    "developer": {
-        "name": "Sidhant Sharma [:tk]",
-        "url": "http://sidhant.io"
-    },
-
-    "manifest_version": 2
+	"name": "Owl - For comfortable reading",
+	"short_name": "Owl",
+	"description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
+	"version": "2.2.4",
+	"homepage_url": "http://owl.sidhant.io/",
+	"icons": {
+		"48": "data/icons/enabled-48.png",
+		"64": "data/icons/enabled-64.png",
+		"96": "data/icons/enabled-96.png"
+	},
+	"permissions": [
+		"<all_urls>",
+		"storage",
+		"activeTab",
+		"tabs"
+	],
+	"applications": {
+		"gecko": {
+			"id": "owl@sidhant.io",
+			"strict_min_version": "46.0"
+		}
+	},
+	"browser_action": {
+		"browser_style": false,
+		"default_title": "Owl button",
+		"default_icon": {
+			"16": "data/icons/enabled-16.png",
+			"32": "data/icons/enabled-32.png",
+			"64": "data/icons/enabled-64.png"
+		}
+	},
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+	},
+	"page_action": {
+		"default_icon": {
+			"16": "data/icons/enabled-16.png",
+			"32": "data/icons/enabled-32.png",
+			"64": "data/icons/enabled-64.png"
+		},
+		"default_title": "Open Owl Panel",
+		"default_popup": "data/markup/panel.html",
+		"browser_style": false
+	},
+	"options_ui": {
+		"browser_style": true,
+		"page": "data/markup/owl_preferences.html",
+		"open_in_tab": false
+	},
+	"commands": {
+		"toggle-owl": {
+			"suggested_key": {
+				"default": "Alt+Shift+D"
+			},
+			"description": "Toggle Own ON or OFF"
+		},
+		"toggle-classic": {
+			"suggested_key": {
+				"default": "Alt+Shift+C"
+			},
+			"description": "Use classic theme on current page"
+		},
+		"toggle-current-site": {
+			"suggested_key": {
+				"default": "Alt+Shift+X"
+			},
+			"description": "Enable/Disable Owl on current website"
+		}
+	},
+	"developer": {
+		"name": "Sidhant Sharma [:tk]",
+		"url": "http://sidhant.io"
+	},
+	"manifest_version": 2
 }

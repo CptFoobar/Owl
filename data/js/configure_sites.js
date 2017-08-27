@@ -6,7 +6,7 @@
     browser.runtime.onMessage.addListener(messageHandler);
 
     function messageHandler(message) {
-        console.log("sites", message);
+        //console.log("sites", message);
         switch (message.intent) {
             case "siteSettings":
                 $(function() {
@@ -59,7 +59,7 @@
         if ($("#always_enable_sites").children().length === 0)
             $("#always_enable_sites").append(
                     '<li class="list-group-item text-center no_sites">' +
-                        'No sites are set to use Classic Theme.' +
+                        'No sites are set to enable Owl always.' +
                     '</li>');
     }
 

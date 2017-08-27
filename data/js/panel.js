@@ -6,7 +6,7 @@
         browser.runtime.onMessage.addListener(messageHandler);
         var uiUpdateLock = false;
         function messageHandler(message) {
-            console.log("panel", message);
+            //console.log("panel", message);
             switch (message.intent) {
                 case "tabConfig":
                     uiUpdateLock = true;
@@ -16,7 +16,7 @@
             }
         }
 
-        $('[data-toggle="tooltip"]').tooltip(); 
+        $('[data-toggle="tooltip"]').tooltip();
 
         function updatePanelUi(config) {
             $("#toggle_owl").bootstrapToggle((config.mode ? "on" : "off"));

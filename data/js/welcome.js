@@ -14,4 +14,9 @@
     } else {
         document.getElementById("whats-new").style.display = "none";
     }
+
+    $("#floating-got-it").click(function() {
+        // TODO: Add a way to remember help menu so it isn't shown at launch everytime
+    });
+
 }());

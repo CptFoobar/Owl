@@ -67,6 +67,11 @@ browser.runtime.onMessage.addListener(panelMessageListener);
 // preference change listeners
 browser.runtime.onMessage.addListener(listenPrefUpdate);
 
+// Set update listener to show 'Welcome' page
+browser.runtime.onInstalled.addListener((details) => {
+    if (details.reason == "update") showWelcomePage(true);
+});
+
 /* returns JSON with paths to icon according to condition. */
 function iconSet(condition) {
     var infix = (condition ? "enabled" : "disabled");
@@ -169,6 +174,8 @@ function handlePanelMessage(message, tab) {
                 var index = indexInArray(tabUrl, alwaysDisableSites);
                 if (message.value) {
                     if (index == -1) {
+                        if (!alwaysDisableSites)
+                            alwaysDisableSites = [];
                         alwaysDisableSites.push(tabUrl);
                         browser.storage.local.set({
                             whiteSites: alwaysDisableSites
@@ -195,14 +202,14 @@ function handlePanelMessage(message, tab) {
                 var index = indexInArray(tabUrl, alwaysEnableSites);
                 if (message.value) {
                     if (index == -1) {
+                        if (!alwaysEnableSites)
+                            alwaysEnableSites = [];
                         alwaysEnableSites.push(tabUrl);
                         browser.storage.local.set({
                             alwaysEnableSites: alwaysEnableSites
                         });
-                        if (tabStyle != NO_STYLE) {
-                            browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(() => {
-                                browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
-                            }, null);
+                        if (!owlMode) {
+                            browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                         }
                     }
                 } else {
@@ -210,7 +217,7 @@ function handlePanelMessage(message, tab) {
                     browser.storage.local.set({
                         alwaysEnableSites: alwaysEnableSites
                     });
-                    if (tabStyle != NO_STYLE)
+                    if (!owlMode)
                         browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                 }
                 debugLog("alwaysEnableWebsite", alwaysEnableSites);
@@ -219,7 +226,7 @@ function handlePanelMessage(message, tab) {
             break;
         }
         case "getSiteSettings": {
-            console.log("Sending siteSettings");
+            debugLog("Sending siteSettings");
             browser.runtime.sendMessage({
                 intent: "siteSettings",
                 payload: {
@@ -315,6 +322,8 @@ function activeTabInList(siteList) {
 }
 
 function manipClassic(index, host, toAdd, tabId) {
+    if (!classicSiteList)
+        classicSiteList = [];
     if (index === -1 && toAdd) {
         classicSiteList.push(host);
         browser.storage.local.set({
@@ -409,15 +418,34 @@ function resetStorage() {
         alwaysEnableSites: [],
         classicSiteList: DEFAULT_CLASSICS
     });
+    activateOnStartup = false;
+    alwaysClassic = false;
+    invertPdf = true;
+    allowIncognito = true;
+    defaultStyleFile = alwaysClassic ? CLASSIC_STYLE_FILE : INVERT_STYLE_FILE;
+    localFiles = false;
+    /* Site configuration lists */
+    alwaysDisableSites = [];
+    alwaysEnableSites = [];
+    /* Set default classics */
+    classicSiteList = [];
 }
 
 function logError(error) {
-    debugLog(`Error: ${error}`);
+    debugLog(`[OWL] Error: ${error}`);
 }
 
 function debugLog(string) {
     if (devMode)
-        console.log(string);
+        console.log("[OWL] ", string);
+}
+
+function isEmptyObject(obj) {
+    return (Object.keys(obj).length === 0 && obj.constructor === Object);
+}
+
+function hasNoKeys(obj) {
+    return (Object.keys(obj).length === 0);
 }
 
 function listenPrefUpdate(message) {
@@ -450,4 +478,13 @@ function refreshOwl() {
         setOwl(false);
         setOwl(owlMode);
     }
+}
+
+function showWelcomePage(isUpdateNotif) {
+    var welcomeUrl = "data/markup/welcome.html" + (isUpdateNotif ? "?update=y" : "");
+    debugLog(welcomeUrl);
+    var creating = browser.tabs.create({
+        "url": browser.extension.getURL(welcomeUrl)
+      });
+      creating.then(null, null);
 }
