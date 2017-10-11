@@ -40,14 +40,12 @@ To install this add-on in Firefox (version 38.0 and above), just follow [this](h
 Happy Reading!
 
 ## Contribute
-Current version (v1.3.2) has the most of the functionality I intended to have for this add-on. A few upcoming features would be:
-- Export / Import settings
-- Sync across Firefox profiles (once the WebExtensions API supports it, which should be soon)
-Currently, the add-on is being port from the lagacy Add-on SDK to the newer WebExtensions API. The development branch is `v2` in case you wish to help with the port.
+Current version (v2.2.4) has the most of the functionality I intended to have for this add-on. 
+The development for the next version v3 has begun in branch `v3` in case you wish to help with the port. A tracker for v3 progress is [here](https://github.com/TigerKid001/Owl/issues/21)
 To contribute, you can:
 - [Review on AMO](https://addons.mozilla.org/en-US/firefox/users/login?to=/en-US/firefox/addon/owl/reviews/add)
 - [Suggest new features](https://github.com/TigerKid001/Owl/issues)
 - Implement new features (Awesome!)
 - [Report bugs](https://github.com/TigerKid001/Owl/issues)
-- Fix bugs (Awesome!)
+- Fix bugs, add enhancement, close open issues (Awesome!)
 - [Contribute with PayPal](https://addons.mozilla.org/en-US/firefox/addon/owl/) (Super Awesome!)
