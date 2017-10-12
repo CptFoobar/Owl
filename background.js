@@ -98,6 +98,10 @@ function setOwlOnTabs(tabs, oMode) {
         if (!allowIncognito && tab.incognito && oMode) {
             continue;
         }
+        // Show/hide pageAction
+        if (!tab.url.match(/^about:/)) {
+            owlPageAction.show(tab.id);
+        }
         var fileUrl = getStyleFileForUrl(getDomainFromUrl(tab.url));
         if (fileUrl == NO_STYLE) {
             continue;
@@ -116,10 +120,6 @@ function setOwlOnTabs(tabs, oMode) {
             if (invertPdf && oMode)
                 browser.tabs.insertCSS(tab.id, makeCssConfig(PDF_INVERT_STYLE_FILE));
         }, logError);
-        // Show/hide pageAction
-        if (!tab.url.match(/^about:/)) {
-            owlPageAction.show(tab.id);
-        }
     }
 }
 
