@@ -1,10 +1,19 @@
 @namespace html url(http://www.w3.org/1999/xhtml);
 
 @-moz-document regexp("^(https?|ftps?|file):(?!((.*).pdf)).*$") {
+
     html {
         filter: invert(95%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
         overflow: auto;
+        background: rgb(30, 30, 30) !important;
+        min-height: 100%;
     }
+
+    /* TODO: The following snippet reverts the effect of global filter on video elements
+             Though this works, it really makes video laggy (since the reverse transform is applied to each frame)
+             Find a way to not apply global invert filter to videos at all
+     */
+
     img,
     iframe,
     *:not(object):not(body)>embed:not(video),
@@ -12,30 +21,23 @@
     *[style*="background:url"]:empty,
     *[style*="background-image:url"]:empty,
     *[style*="background: url"]:empty,
-    *[style*="background-image: url"]:empty {
-        filter: brightness(95%) invert(105%) hue-rotate(180deg) !important;
-    }
-
+    *[style*="background-image: url"]:empty,
     video {
-        filter: brightness(95%) invert(105%) hue-rotate(180deg) contrast(111%) !important;
+        filter: brightness(95%) contrast(105%) invert(105%) hue-rotate(180deg) !important;
     }
 
-    .irc_bg {
-        background-color: #2b2b2b;
-    }
-
-    :-moz-full-screen * {
+    /* Fullscreen inversion fix */
+    :fullscreen, :-moz-full-screen *, video:fullscreen {
         filter: none !important;
-    }
-
-    html {
-        background: rgb(30, 30, 30) !important;
-        min-height: 100%;
     }
 
     /* Google images image preview banner */
     #irc_cc {
         background-color: #dfdfdf;
+    }
+
+    .irc_bg {
+        background-color: #2b2b2b;
     }
 
     .irc_pt, ._Hcb{
@@ -59,11 +61,20 @@
     .Row.Pend-10 {
         background: #f9f9f9 !important;
     }
+
+    /* Wikipedia Math formulas fix */
+    .mwe-math-fallback-image-inline {
+        filter: none !important;
+    }
+
+    @-moz-document url-prefix("https://talkgadget.google.com/") {
+        div.PD.IF, img.Yf {
+            border: 1pt solid #2b2b2b !important;
+        }
+
+        div.ci {
+            visibility: hidden !important;
+        }
+    }
 }
 
-/*
-youtube player fix:
-iframe, .html5-video-player, .has-custom-banner, #theater-background, *:not(.html5-video-player):not(.channel-header-profile-image-container):not(.html5-storyboard-filmstrip):not(.html5-storyboard-framepreview):not(.html5-storyboard-lens) > img {
-    filter: invert(100%) hue-rotate(180deg) brightness(110%) contrast(90%) !important;
-}
-*/

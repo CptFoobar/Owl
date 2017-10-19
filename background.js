@@ -1,6 +1,4 @@
-const DEFAULT_CLASSICS = ["techcrunch.com", "amazon.ca", "tomshardware.com",
-    "pcpartpicker.com", "ebay.ca", "ebay.in", "stackoverflow.com"
-];
+const DEFAULT_CLASSICS = [];
 
 const INVERT_STYLE_FILE = "data/css/owlInverted.css";
 const CLASSIC_STYLE_FILE = "data/css/owlClassic.css";
@@ -95,6 +93,9 @@ function setOwl(oMode) {
 
 function setOwlOnTabs(tabs, oMode) {
     for (let tab of tabs) {
+        if (tab.url.match(/^about:/)) {
+            continue;
+        }
         if (!allowIncognito && tab.incognito && oMode) {
             continue;
         }
@@ -191,7 +192,7 @@ function handlePanelMessage(message, tab) {
                     if (tabStyle != NO_STYLE)
                         browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                 }
-                debugLog("alwaysDisabled", alwaysDisableSites);
+                debugLog("alwaysDisabled " + JSON.stringify(alwaysDisableSites));
             }
             refreshOwl();
             break;
@@ -220,7 +221,7 @@ function handlePanelMessage(message, tab) {
                     if (!owlMode)
                         browser.tabs.removeCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                 }
-                debugLog("alwaysEnableWebsite", alwaysEnableSites);
+                debugLog("alwaysEnableWebsite " + JSON.stringify(alwaysEnableSites));
             }
             refreshOwl();
             break;
@@ -398,7 +399,7 @@ function commandHandler(command) {
                         if (tabStyle != NO_STYLE)
                             browser.tabs.insertCSS(tabId, makeCssConfig(tabStyle)).then(null, logError);
                     }
-                    debugLog("alwaysDisabled", alwaysDisableSites);
+                    debugLog("alwaysDisabled " + JSON.stringify(alwaysDisableSites));
                 }
                 refreshOwl();
             }, logError);
@@ -432,7 +433,7 @@ function resetStorage() {
 }
 
 function logError(error) {
-    debugLog(`[OWL] Error: ${error}`);
+    debugLog("Error: " + JSON.stringify(error));
 }
 
 function debugLog(string) {
