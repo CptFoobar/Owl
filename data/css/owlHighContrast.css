@@ -1,0 +1,81 @@
+@namespace html url(http://www.w3.org/1999/xhtml);
+
+@-moz-document regexp("^(https?|ftps?|file):(?!((.*).pdf)).*$") {
+
+    html {
+        filter: invert(100%) hue-rotate(180deg) contrast(95%) !important;
+        overflow: auto;
+        background: #060606 !important;
+        min-height: 100%;
+    }
+
+    /* TODO: The following snippet reverts the effect of global filter on video elements
+             Though this works, it really makes video laggy (since the reverse transform is applied to each frame)
+             Find a way to not apply global invert filter to videos at all
+     */
+
+    img,
+    iframe,
+    *:not(object):not(body)>embed:not(video),
+    object,
+    *[style*="background:url"]:empty,
+    *[style*="background-image:url"]:empty,
+    *[style*="background: url"]:empty,
+    *[style*="background-image: url"]:empty,
+    video {
+        filter: contrast(105%) invert(100%) hue-rotate(180deg) !important;
+    }
+
+    /* Fullscreen inversion fix */
+    :fullscreen, :-moz-full-screen *, video:fullscreen {
+        filter: none !important;
+    }
+
+    /* Google images image preview banner */
+    #irc_cc {
+        background-color: #dfdfdf;
+    }
+
+    .irc_bg {
+        background-color: #2b2b2b;
+    }
+
+    .irc_pt, ._Hcb{
+        color: #383838;
+    }
+
+    /* Google homepage user image */
+    .gb_b.gb_4a.gb_R {
+        filter: brightness(90%) invert(95%) hue-rotate(180deg) !important;
+    }
+
+    /* Google Inbox icons fix */
+    .pE, .HH{
+        filter: brightness(90%) invert(95%) hue-rotate(180deg) !important;
+    }
+    .du.ew, div.l9 > div:not(.I7) {
+        filter: invert(95%);
+    }
+
+    /* Yahoo navigation fix */
+    .Row.Pend-10 {
+        background: #f9f9f9 !important;
+    }
+
+    /* Wikipedia Math formulas fix */
+    .mwe-math-fallback-image-inline {
+        filter: none !important;
+    }
+
+    @-moz-document url-prefix("https://talkgadget.google.com/") {
+        
+        div.PD.IF, img.Yf {
+            border: 1pt solid #2b2b2b !important;
+        }
+
+        div.ci {
+            visibility: hidden !important;
+        }
+    }
+}
+
