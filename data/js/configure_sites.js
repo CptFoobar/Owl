@@ -16,6 +16,9 @@
                     for (var i = 0; i < message.payload.classicSites.length; i++)
                         $("#classic_sites").append(getEntryForUrl(message.payload.classicSites[i]));
 
+					for (var i = 0; i < message.payload.highContrastSites.length; i++)
+                        $("#high_contrast_sites").append(getEntryForUrl(message.payload.highContrastSites[i]));
+
                     for (var i = 0; i < message.payload.alwaysEnableSites.length; i++)
                         $("#always_enable_sites").append(getEntryForUrl(message.payload.alwaysEnableSites[i]));
 
@@ -55,6 +58,11 @@
             $("#classic_sites").append(
                     '<li class="list-group-item text-center no_sites">' +
                         'No sites are set to use Classic Theme.' +
+                    '</li>');
+        if ($("#high_contrast_sites").children().length === 0)
+            $("#high_contrast_sites").append(
+                    '<li class="list-group-item text-center no_sites">' +
+                        'No sites are set to use High Contrast Theme.' +
                     '</li>');
         if ($("#always_enable_sites").children().length === 0)
             $("#always_enable_sites").append(

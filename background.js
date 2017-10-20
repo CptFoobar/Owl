@@ -19,6 +19,7 @@ var localFiles = false;
 /* Site configuration lists */
 var alwaysDisableSites = [];
 var alwaysEnableSites = [];
+var alwaysHCSites = [];
 // Set techcrunch.com as default classic
 var classicSiteList = DEFAULT_CLASSICS;
 // debugging flag
@@ -153,7 +154,8 @@ function handlePanelMessage(message, tab) {
                 classic: (indexInArray(tabUrl, classicSiteList) > -1),
                 alwaysDisable: (indexInArray(tabUrl, alwaysDisableSites) > -1),
                 alwaysEnable: (indexInArray(tabUrl, alwaysEnableSites) > -1),
-                alwaysClassic: alwaysClassic
+                alwaysClassic: alwaysClassic,
+				highContrast: (indexInArray(tabUrl, alwaysHCSites) > -1)
             });
             break;
         }
@@ -233,7 +235,8 @@ function handlePanelMessage(message, tab) {
                 payload: {
                     whitelistSites: alwaysDisableSites,
                     classicSites: classicSiteList,
-                    alwaysEnableSites: alwaysEnableSites
+                    alwaysEnableSites: alwaysEnableSites,
+					highContrastSites: alwaysHCSites
                 }
             });
             break;
