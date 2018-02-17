@@ -1,6 +1,6 @@
 html, body {
     width: 300px;
-    height: 485px;
+    height: 480px;
 }
 
 .toggle.owl,
@@ -44,7 +44,7 @@ html, body {
 }
 
 .site_options {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .disabled_list_link {
@@ -64,7 +64,7 @@ html, body {
 }
 
 .footer_divider {
-    margin-top: 17px;
+    margin-top: 10px;
     margin-bottom: 5px;
     border-width: 1px 0px 0px;
     border-style: solid none none;
@@ -100,6 +100,7 @@ p {
 
 .configure-sites {
     background-color: rgb(41, 119, 236);
+    margin: 5px 0 0 0;
 }
 
 .configure-sites:focus, .configure-sites:hover, .configure-sites:active  {

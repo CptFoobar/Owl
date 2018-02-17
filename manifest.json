@@ -63,11 +63,23 @@
 			},
 			"description": "Use classic theme on current page"
 		},
+		"toggle-hc": {
+			"suggested_key": {
+				"default": "Alt+Shift+Z"
+			},
+			"description": "Use High Contrast theme on current page"
+		},
 		"toggle-current-site": {
 			"suggested_key": {
 				"default": "Alt+Shift+X"
 			},
-			"description": "Enable/Disable Owl on current website"
+			"description": "Always Disable Owl on current website"
+		},
+		"always-enable-site": {
+			"suggested_key": {
+				"default": "Alt+Shift+E"
+			},
+			"description": "Always Enable Owl on current website"
 		}
 	},
 	"developer": {

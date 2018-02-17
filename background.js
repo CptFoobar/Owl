@@ -6,6 +6,7 @@ const PDF_INVERT_STYLE_FILE = "data/css/pdfInversion.css";
 const CMD_TOGGLE_OWL = "toggle-owl";
 const CMD_TOGGLE_CLASSIC = "toggle-classic";
 const CMD_TOGGLE_CURRENT_SITE = "toggle-current-site";
+const CMD_TOGGLE_HIGHCONTRAST = "toggle-hc";
 const NO_STYLE = "no_style";
 
 var owlMode = false;
@@ -407,6 +408,9 @@ function commandHandler(command) {
                 refreshOwl();
             }, logError);
             break;
+        }
+        case CMD_TOGGLE_HIGHCONTRAST: {
+            // TODO: Implement HC theme switch
         }
     }
 }
