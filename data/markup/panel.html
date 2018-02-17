@@ -18,23 +18,22 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-6 col-xs-push-2">
+            <div class="col-xs-6 col-xs-push-3" style="padding-left: 8px;">
                 <input id="toggle_owl" data-toggle="toggle" data-on="On&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" data-off="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Off" data-onstyle="success" data-offstyle="danger" data-width="135" data-style="owl" type="checkbox">
             </div>
         </div>
         <div class="row">
             <div class="vspace"></div>
             <div class="col-xs-12 text-center noselect">
-                <p class="hotkey"> Owl Hotkey: Alt + Shift + D </p>
-                <p class="hotkey"> Classic Theme Hotkey: Alt + Shift + C </p>
+                <p class="hotkey"> Owl Toggle: Alt + Shift + D </p>
             </div>
         </div>
         <div class="row">
-            <div class="vspace"></div>
             <div class="col-xs-12 noselect">
                 <div class="col-xs-9">
                     <p id="use_classic_text" class="site_options">
                         Use Classic theme on this website
+						<span class="hotkey">{ Alt + Shift + C }</span>
                     </p>
                 </div>
                 <div class="col-xs-3 text-center">
@@ -43,10 +42,23 @@
                       data-offstyle="danger" type="checkbox" data-style="setting">
                 </div>
             </div>
+			<div class="col-xs-12 noselect">
+				<div class="col-xs-9">
+					<p class="site_options" id="high_contrast_text">Use High Contrast on this Website
+					<span class="hotkey">{ Alt + Shift + Z }</span>
+					</p>
+				</div>
+				<div class="col-xs-3 text-center">
+					<input id="use_high_contrast" data-toggle="toggle" data-size="small"
+					  data-on="On" data-off="Off" data-onstyle="success"
+					  data-offstyle="danger" type="checkbox" data-style="setting">
+				</div>
+			</div>
             <div class="col-xs-12 noselect">
                 <div class="col-xs-9">
-                    <p class="site_options" id="disable_here_text">Disable Owl for this website
-                    </p>
+                    <p class="site_options" id="disable_here_text">Disable Owl always for this website
+					<span class="hotkey">{ Alt + Shift + X }</span>
+				    </p>
                 </div>
                 <div class="col-xs-3 text-center">
                     <input id="disable_here" data-toggle="toggle" data-size="small"
@@ -61,7 +73,7 @@
                 </div>
                 <div class="col-xs-3 text-center">
                     <input id="always_enable_here" data-toggle="toggle"
-                      data-size="small" data-on="On" data-off="Off"
+                      data-size="small" data-on="On" data- off="Off"
                       data-onstyle="success" data-offstyle="danger"
                       data-style="setting" type="checkbox">
                 </div>
