@@ -2,7 +2,7 @@
 	"name": "Owl - For comfortable reading",
 	"short_name": "Owl",
 	"description": "An add-on to make online reading easy.\nIf you spend long hours in front of a computer screen, you likely have developed an aversion towards those glaring white backgrounds and harsh color combinations on websites.\nThis add-on transforms all webpages into a night-friendly mode, with dark background and dimmed colors.",
-	"version": "2.2.5",
+	"version": "2.2.6",
 	"homepage_url": "http://owl.sidhant.io/",
 	"icons": {
 		"48": "data/icons/enabled-48.png",
