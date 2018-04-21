@@ -26,9 +26,14 @@ input[type="checkbox"]:active {
     outline: none;
 }
 
-#openSiteConfig {
+#openSiteConfig, 
+#exportSettings,
+#importSettings{
     background-color: #fbfbfb;
     border: 1px solid #c1c1c1;
+}
+#importSettingsInput{
+    display:none
 }
 
 #openSiteConfig:hover,

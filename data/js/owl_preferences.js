@@ -106,7 +106,7 @@
             const reader = new FileReader();      
             reader.onload = function(e) {
               let text = JSON.parse(e.target.result);
-              console.log(text.whiteSites)
+              changeSiteSettings(text)
             }
             reader.onerror = function(err) {
               console.log(
@@ -118,6 +118,21 @@
   
             reader.readAsText(file);
         }
+        function changeSiteSettings(new_settings){
+            browser.storage.local.get().then((settings) => {
+                // reset storage if nothing is stored so far
+                if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
+                    resetStorage();
+                } else {
+                    browser.storage.local.set({
+                        whiteSites: new_settings.whiteSites,
+                        alwaysEnableSites:new_settings.alwaysEnableSites,
+                        classicSiteList:new_settings.classicSiteList
+                    });
+                }
+
+        });
+    }
 
     });
 }());
