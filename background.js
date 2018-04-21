@@ -281,13 +281,14 @@ function handlePanelMessage(message, tab) {
     }
 }
 
+//save site settings to local storage and 
+//assign new values to global site settings variables
 function replaceSiteSettings(newSettings){
     browser.storage.local.get().then((settings) => {
         // reset storage if nothing is stored so far
         if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
             resetStorage();
         } else {
-            //console.log(newSettings)
             browser.storage.local.set(newSettings)
             .then(()=>{
                 /* Site configuration lists */
