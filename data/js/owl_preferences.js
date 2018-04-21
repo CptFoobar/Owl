@@ -105,8 +105,12 @@
         function readJSON(file) {
             const reader = new FileReader();      
             reader.onload = function(e) {
-              let text = JSON.parse(e.target.result);
-              changeSiteSettings(text)
+                let newSettings = JSON.parse(e.target.result);
+                console.log(newSettings)
+                browser.runtime.sendMessage({
+                    intent: "replaceSiteSettings",
+                    newSettings: newSettings
+                });
             }
             reader.onerror = function(err) {
               console.log(
@@ -118,21 +122,7 @@
   
             reader.readAsText(file);
         }
-        function changeSiteSettings(new_settings){
-            browser.storage.local.get().then((settings) => {
-                // reset storage if nothing is stored so far
-                if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
-                    resetStorage();
-                } else {
-                    browser.storage.local.set({
-                        whiteSites: new_settings.whiteSites,
-                        alwaysEnableSites:new_settings.alwaysEnableSites,
-                        classicSiteList:new_settings.classicSiteList
-                    });
-                }
 
-        });
-    }
 
     });
 }());

@@ -271,9 +271,35 @@ function handlePanelMessage(message, tab) {
                 });
             }
         }
+        case "replaceSiteSettings":{
+            newSettings = message.newSettings
+            if(newSettings){
+                replaceSiteSettings(newSettings)
+            }
+            
+        }
     }
 }
 
+function replaceSiteSettings(newSettings){
+    browser.storage.local.get().then((settings) => {
+        // reset storage if nothing is stored so far
+        if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
+            resetStorage();
+        } else {
+            //console.log(newSettings)
+            browser.storage.local.set(newSettings)
+            .then(()=>{
+                /* Site configuration lists */
+                alwaysDisableSites = newSettings.whiteSites;
+                alwaysEnableSites = newSettings.alwaysEnableSites;
+                /* Set default classics */
+                classicSiteList = newSettings.classicSiteList;
+            })
+        }
+
+    });
+}
 function getStyleFileForUrl(tabUrl) {
     /* Check if file is local file */
     if (tabUrl.indexOf("file://") > -1 && !localFiles)
