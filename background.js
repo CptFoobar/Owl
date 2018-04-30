@@ -347,7 +347,8 @@ function makeCssConfig(file_url) {
     return {
         file: file_url,
         matchAboutBlank: true,
-        runAt: "document_start"
+        runAt: "document_start",
+        allFrames: true
     };
 }
 
