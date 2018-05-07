@@ -51,6 +51,76 @@
                 url: "configure_sites.html"
             });
         });
+       
+        //create on click listener for export setting button
+        $("#exportSettings").click(function() {
+        
+            browser.storage.local.get().then((settings) => {
+                // reset storage if nothing is stored so far
+                if (!settings || (Object.keys(settings).length === 0 && settings.constructor === Object)) {
+                    resetStorage();
+                } else {
+                    const fileName = 'owl_settings.json',
+                    properties = {
+                    type: 'octet/stream'
+                    },
+                    data = [JSON.stringify({
+                        whiteSites:settings.whiteSites,
+                        alwaysEnableSites:settings.alwaysEnableSites,
+                        classicSiteList:settings.classicSiteList
+                    })];
+                    saveDataToFile(data, fileName, properties);
+                    console.log('save')
+                }
+                
+            }, (err)=>{
+                console.log(err)
+            });
+        
+            
+        });
+
+        $("#importSettings").change(function(event){
+            const filesList = event.target.files;
+            if(filesList.length===1){
+                const file = filesList[0]
+                importSettingsFromJSONFile(file)
+            }
+        })
+
+        //Import site settings from a JSON file
+        function importSettingsFromJSONFile(file) {
+            const reader = new FileReader();      
+            reader.onload = function(e) {
+                let newSettings = JSON.parse(e.target.result);
+                console.log(newSettings)
+                browser.runtime.sendMessage({
+                    intent: "replaceSiteSettings",
+                    newSettings: newSettings
+                });
+            }
+            reader.onerror = function(err) {
+              console.log(
+                  err, 
+                  err.loaded, 
+                  err.loaded === 0, 
+                  file);
+            }
+  
+            reader.readAsText(file);
+        }
+        //save locally created data to file
+        const saveDataToFile = function(data, fileName, properties) {
+            window.URL = window.URL || window.webkitURL;
+            var file = new File(data, fileName, properties),
+            link = document.createElement('a');
+            link.href = window.URL.createObjectURL(file);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+            document.body.removeChild(link)
+        };
 
     });
 }());
